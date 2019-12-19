@@ -9,13 +9,20 @@ namespace Simple301.Core
     /// </summary>
     public class RedirectContentFinder : IContentFinder
     {
-        public bool TryFindContent(PublishedContentRequest request)
+        private readonly RedirectRepository _repository;
+
+        public RedirectContentFinder(RedirectRepository repository)
+        {
+            _repository = repository;
+        }
+
+        public bool TryFindContent(PublishedRequest request)
         {
             //Get the requested URL path + query
             var path = request.Uri.PathAndQuery.ToLower();
 
             //Check the table
-            var matchedRedirect = RedirectRepository.FindRedirect(path);
+            var matchedRedirect = _repository.FindRedirect(path);
             if (matchedRedirect == null) return false;
 
             //Found one, set the 301 redirect on the request and return

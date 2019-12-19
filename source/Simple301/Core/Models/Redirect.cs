@@ -1,11 +1,11 @@
-﻿using System;
-using Umbraco.Core.Persistence;
+﻿using NPoco;
+using System;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Simple301.Core.Models
 {
     [TableName("Redirects")]
-    [PrimaryKey("Id", autoIncrement = true)]
+    [PrimaryKey("Id", AutoIncrement = true)]
     [ExplicitColumns]
     public class Redirect
     {

@@ -14,6 +14,13 @@ namespace Simple301.Core
     [PluginController("Simple301")]
     public class RedirectApiController : UmbracoAuthorizedApiController
     {
+        private readonly RedirectRepository _redirectRepository;
+
+        public RedirectApiController(RedirectRepository redirectRepository)
+        {
+            _redirectRepository = redirectRepository;
+        }
+
         /// <summary>
         /// GET all redirects
         /// </summary>
@@ -21,7 +28,7 @@ namespace Simple301.Core
         [HttpGet]
         public IEnumerable<Redirect> GetAll()
         {
-            return RedirectRepository.GetAllRedirects();
+            return _redirectRepository.GetAllRedirects();
         }
 
         /// <summary>
@@ -37,7 +44,7 @@ namespace Simple301.Core
 
             try
             {
-                var redirect = RedirectRepository.AddRedirect(request.IsRegex, request.OldUrl, request.NewUrl, request.Notes);
+                var redirect = _redirectRepository.AddRedirect(request.IsRegex, request.OldUrl, request.NewUrl, request.Notes);
                 return new AddRedirectResponse() { Success = true, NewRedirect = redirect };
             }
             catch(Exception e)
@@ -61,7 +68,7 @@ namespace Simple301.Core
 
             try
             {
-                var redirect = RedirectRepository.UpdateRedirect(request.Redirect);
+                var redirect = _redirectRepository.UpdateRedirect(request.Redirect);
                 return new UpdateRedirectResponse() { Success = true, UpdatedRedirect = redirect };
             }
             catch (Exception e)
@@ -82,7 +89,7 @@ namespace Simple301.Core
 
             try
             {
-                RedirectRepository.DeleteRedirect(id);
+                _redirectRepository.DeleteRedirect(id);
                 return new DeleteRedirectResponse() { Success = true };
             }
             catch(Exception e)
@@ -97,7 +104,7 @@ namespace Simple301.Core
         [HttpPost]
         public void ClearCache()
         {
-            RedirectRepository.ClearCache();
+            _redirectRepository.ClearCache();
         }
     }
 }

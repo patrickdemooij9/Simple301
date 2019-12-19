@@ -7,6 +7,7 @@ using Simple301.Core.Extensions;
 using System.Text.RegularExpressions;
 using Simple301.Core.Utilities;
 using Simple301.Core.Utilities.Caching;
+using Umbraco.Core.Scoping;
 
 namespace Simple301.Core
 {
@@ -15,15 +16,19 @@ namespace Simple301.Core
     /// Utilizes Umbraco Database context to persist redirects into the database with
     /// cached in memory collection for fast query
     /// </summary>
-    public static class RedirectRepository
+    public class RedirectRepository
     {
-        private static CacheManager _cacheManager;
+        private CacheManager _cacheManager;
         private const int DEFAULT_CACHE_DURATION = 86400;
         private const string CACHE_CATEGORY = "Redirects";
         private const string CACHE_ALL_KEY = "AllRedirects";
 
-        static RedirectRepository()
+        private readonly IScopeProvider _scopeProvider;
+
+        public RedirectRepository(IScopeProvider scopeProvider)
         {
+            _scopeProvider = scopeProvider;
+
             var settingsUtility = new SettingsUtility();
 
             // define the cache duration
@@ -42,7 +47,7 @@ namespace Simple301.Core
         /// Get all redirects from the repositry
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        public static IEnumerable<Redirect> GetAllRedirects()
+        public IEnumerable<Redirect> GetAllRedirects()
         {
             // Update with latest from DB
             return FetchRedirects().Select(x => x.Value);
@@ -55,7 +60,7 @@ namespace Simple301.Core
         /// <param name="newUrl">New Url to redirect to</param>
         /// <param name="notes">Any associated notes with this redirect</param>
         /// <returns>New redirect from DB if successful</returns>
-        public static Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, string notes)
+        public Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, string notes)
         {
             if (!oldUrl.IsSet()) throw new ArgumentNullException("oldUrl");
             if (!newUrl.IsSet()) throw new ArgumentNullException("newUrl");
@@ -78,24 +83,28 @@ namespace Simple301.Core
             if (!isRegex && DetectLoop(oldUrl, newUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //Add redirect to DB
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-            var idObj = db.Insert(new Redirect()
+            using (var scope = _scopeProvider.CreateScope())
             {
-                IsRegex = isRegex,
-                OldUrl = oldUrl,
-                NewUrl = newUrl,
-                LastUpdated = DateTime.Now.ToUniversalTime(),
-                Notes = notes
-            });
+                var idObj = scope.Database.Insert(new Redirect()
+                {
+                    IsRegex = isRegex,
+                    OldUrl = oldUrl,
+                    NewUrl = newUrl,
+                    LastUpdated = DateTime.Now.ToUniversalTime(),
+                    Notes = notes
+                });
 
-            //Clear the current cache
-            ClearCache();
+                scope.Complete();
 
-            //Fetch the added redirect
-            var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
+                //Clear the current cache
+                ClearCache();
 
-            //return new redirect
-            return newRedirect;
+                //Fetch the added redirect
+                var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
+
+                //return new redirect
+                return newRedirect;
+            }
         }
 
         /// <summary>
@@ -103,7 +112,7 @@ namespace Simple301.Core
         /// </summary>
         /// <param name="redirect">Redirect to update</param>
         /// <returns>Updated redirect if successful</returns>
-        public static Redirect UpdateRedirect(Redirect redirect)
+        public Redirect UpdateRedirect(Redirect redirect)
         {
             if (redirect == null) throw new ArgumentNullException("redirect");
             if (!redirect.OldUrl.IsSet()) throw new ArgumentNullException("redirect.OldUrl");
@@ -128,29 +137,36 @@ namespace Simple301.Core
             if (!redirect.IsRegex && DetectLoop(redirect.OldUrl, redirect.NewUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //get DB Context, set update time, and persist
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-            redirect.LastUpdated = DateTime.Now.ToUniversalTime();
-            db.Update(redirect);
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                redirect.LastUpdated = DateTime.Now.ToUniversalTime();
+                scope.Database.Update(redirect);
+                scope.Complete();
 
-            //Clear the current cache
-            ClearCache();
+                //Clear the current cache
+                ClearCache();
 
-            //return updated redirect
-            return redirect;
+                //return updated redirect
+                return redirect;
+            }
+            
         }
 
         /// <summary>
         /// Handles deleting a redirect from the redirect collection
         /// </summary>
         /// <param name="id">Id of redirect to remove</param>
-        public static void DeleteRedirect(int id)
+        public void DeleteRedirect(int id)
         {
             var item = FetchRedirectById(id);
             if (item == null) throw new ArgumentException("No redirect with an Id that matches " + id);
 
             //Get database context and delete
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-            db.Delete(item);
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                scope.Database.Delete(item);
+                scope.Complete();
+            }
 
             //Clear the current cache
             ClearCache();
@@ -161,7 +177,7 @@ namespace Simple301.Core
         /// </summary>
         /// <param name="oldUrl">Url to search for</param>
         /// <returns>Matched Redirect</returns>
-        public static Redirect FindRedirect(string oldUrl)
+        public Redirect FindRedirect(string oldUrl)
         {
             var matchedRedirect = FetchRedirectByOldUrl(oldUrl, fromCache: true);
             if (matchedRedirect != null) return matchedRedirect;
@@ -180,7 +196,7 @@ namespace Simple301.Core
         /// <summary>
         /// Handles clearing the cache
         /// </summary>
-        public static void ClearCache()
+        public void ClearCache()
         {
             // Delete all items in redirect category
             _cacheManager.GetCacheItems()
@@ -193,7 +209,7 @@ namespace Simple301.Core
         /// Fetches all redirects through cache layer
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        private static Dictionary<string,Redirect> FetchRedirects(bool fromCache = false)
+        private Dictionary<string,Redirect> FetchRedirects(bool fromCache = false)
         {
             // if from cache, make sure we add if it doesn't exist
             if (fromCache)
@@ -207,7 +223,7 @@ namespace Simple301.Core
         /// </summary>
         /// <param name="id">Id of redirect to fetch</param>
         /// <returns>Single redirect with matching Id</returns>
-        private static Redirect FetchRedirectById(int id, bool fromCache = false)
+        private Redirect FetchRedirectById(int id, bool fromCache = false)
         {
             var query = "SELECT * FROM Redirects WHERE Id=@0";
 
@@ -222,7 +238,7 @@ namespace Simple301.Core
         /// </summary>
         /// <param name="oldUrl">OldUrl of redirect to find</param>
         /// <returns>Single redirect with matching OldUrl</returns>
-        private static Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
+        private Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
         {
             var query = "SELECT * FROM Redirects WHERE OldUrl=@0";
 
@@ -237,7 +253,7 @@ namespace Simple301.Core
         /// </summary>
         /// <param name="fromCache">Set to pull from cache</param>
         /// <returns>Collection or regex redirects</returns>
-        private static List<Redirect> FetchRegexRedirects(bool fromCache = false)
+        private List<Redirect> FetchRegexRedirects(bool fromCache = false)
         {
             var query = "SELECT * FROM Redirects WHERE IsRegex=@0";
 
@@ -255,10 +271,12 @@ namespace Simple301.Core
         /// <param name="query">Query</param>
         /// <param name="param">Param value</param>
         /// <returns>Redirect</returns>
-        private static Redirect FetchRedirectFromDbByQuery<T>(string query, T param)
+        private Redirect FetchRedirectFromDbByQuery<T>(string query, T param)
         {
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-            return db.FirstOrDefault<Redirect>(query, param);
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                return scope.Database.FirstOrDefault<Redirect>(query, param);
+            }
         }
 
         /// <summary>
@@ -269,21 +287,26 @@ namespace Simple301.Core
         /// <param name="query">Query</param>
         /// <param name="param">Param value</param>
         /// <returns>Collection of redirects</returns>
-        private static List<Redirect> FetchRedirectsFromDbByQuery<T>(string query, T param)
+        private List<Redirect> FetchRedirectsFromDbByQuery<T>(string query, T param)
         {
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-            return db.Query<Redirect>(query, param).ToList();
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                return scope.Database.Query<Redirect>(query, param).ToList();
+            }
+            
         }
 
         /// <summary>
         /// Fetches all redirects from the database
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        private static Dictionary<string, Redirect> FetchRedirectsFromDb()
+        private Dictionary<string, Redirect> FetchRedirectsFromDb()
         {
-            var db = ApplicationContext.Current.DatabaseContext.Database;
-            var redirects = db.Query<Redirect>("SELECT * FROM Redirects");
-            return redirects != null ? redirects.ToDictionary(x => x.OldUrl) : new Dictionary<string, Redirect>();
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                var redirects = scope.Database.Query<Redirect>("SELECT * FROM Redirects");
+                return redirects != null ? redirects.ToDictionary(x => x.OldUrl) : new Dictionary<string, Redirect>();
+            }
         }
 
         /// <summary>
@@ -294,7 +317,7 @@ namespace Simple301.Core
         /// <param name="newUrl">New URL for new redirect</param>
         /// <param name="redirects">Current list of all redirects</param>
         /// <returns>True if loop detected, false if no loop detected</returns>
-        private static bool DetectLoop(string oldUrl, string newUrl, Dictionary<string, Redirect> redirects)
+        private bool DetectLoop(string oldUrl, string newUrl, Dictionary<string, Redirect> redirects)
         {
             // quick check for any links to this new redirect
             if (!redirects.ContainsKey(newUrl) && !redirects.Any(x => x.Value.NewUrl.Equals(oldUrl))) return false;
