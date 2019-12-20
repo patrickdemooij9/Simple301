@@ -64,6 +64,15 @@
                                         <a ng-if="!item.$edit" href="{{item.NewUrl}}" target="_blank">{{item.NewUrl}}</a>
                                         <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.NewUrl" placeholder="New Url" no-dirty-check /></div>
                                     </td>
+                                    <td data-title="'Type'" sortable="'Type'">
+                                        <span ng-if="!item.$edit">{{item.Type}}</span>
+                                        <div ng-if="item.$edit">
+                                            <select class="form-control" type="text" ng-model="item.Type" placeholder="Type" no-dirty-check>
+                                                <option value="301">Permanent</option>
+                                                <option value="302">Temporary</option>
+                                            </select>
+                                        </div>
+                                    </td>
                                     <td data-title="'Notes'" sortable="'Notes'">
                                         <span ng-if="!item.$edit">{{item.Notes}}</span>
                                         <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.Notes" placeholder="Notes" no-dirty-check /></div>

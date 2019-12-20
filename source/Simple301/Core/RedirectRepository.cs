@@ -2,6 +2,7 @@ using SimpleRedirects.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Umbraco.Core;
 using SimpleRedirects.Core.Extensions;
 using System.Text.RegularExpressions;
@@ -60,14 +61,18 @@ namespace SimpleRedirects.Core
         /// <param name="newUrl">New Url to redirect to</param>
         /// <param name="notes">Any associated notes with this redirect</param>
         /// <returns>New redirect from DB if successful</returns>
-        public Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, string notes)
+        public Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, string type, string notes)
         {
             if (!oldUrl.IsSet()) throw new ArgumentNullException("oldUrl");
             if (!newUrl.IsSet()) throw new ArgumentNullException("newUrl");
+            if (!type.IsSet()) throw new ArgumentNullException("type");
 
             //Ensure starting slash if not regex
             if(!isRegex)
                 oldUrl = oldUrl.EnsurePrefix("/").ToLower();
+
+            //Check if type is a valid redirect response status
+            if (type.Equals(HttpStatusCode.TemporaryRedirect))
 
             // Allow external redirects and ensure slash if not absolute
             newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?

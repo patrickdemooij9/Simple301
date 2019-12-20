@@ -12,6 +12,9 @@ namespace SimpleRedirects.Core.Models
         [Required]
         public string NewUrl { get; set; }
 
+        [Required]
+        public string Type { get; set; }
+
         public string Notes { get; set; }
     }
 }
