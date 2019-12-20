@@ -1,12 +1,12 @@
-﻿using Umbraco.Core.Composing;
+using Umbraco.Core.Composing;
 using Umbraco.Core.Migrations;
 using Umbraco.Core.Migrations.Upgrade;
 using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
 using Umbraco.Core.Logging;
-using Simple301.Core.Migrations;
+using SimpleRedirects.Core.Migrations;
 
-namespace Simple301.Core.Components
+namespace SimpleRedirects.Core.Components
 {
     public class DatabaseUpgradeComponent : IComponent
     {

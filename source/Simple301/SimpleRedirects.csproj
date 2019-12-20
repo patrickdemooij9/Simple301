@@ -7,8 +7,8 @@
     <ProjectGuid>{418B07FD-2CA7-4195-8DD0-3252201485FE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Simple301</RootNamespace>
-    <AssemblyName>Simple301</AssemblyName>
+    <RootNamespace>SimpleRedirects</RootNamespace>
+    <AssemblyName>SimpleRedirects</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -310,18 +310,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="App_Plugins\Simple301\package.manifest" />
+    <Content Include="App_Plugins\SimpleRedirects\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Simple301\app.html" />
-    <Content Include="App_Plugins\Simple301\assets\scripts\app.js" />
-    <Content Include="App_Plugins\Simple301\assets\scripts\vendors.min.js" />
-    <Content Include="App_Plugins\Simple301\assets\styles\styles.min.css" />
-    <Content Include="App_Plugins\Simple301\assets\styles\vendors.min.css" />
+    <Content Include="App_Plugins\SimpleRedirects\app.html" />
+    <Content Include="App_Plugins\SimpleRedirects\assets\scripts\app.js" />
+    <Content Include="App_Plugins\SimpleRedirects\assets\scripts\vendors.min.js" />
+    <Content Include="App_Plugins\SimpleRedirects\assets\styles\styles.min.css" />
+    <Content Include="App_Plugins\SimpleRedirects\assets\styles\vendors.min.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

@@ -1,4 +1,4 @@
-﻿namespace Simple301.Core.Utilities
+namespace SimpleRedirects.Core.Utilities
 {
     /// <summary>
     /// Settings keys for setting lookup

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Simple301</id>
+    <id>SimpleRedirects</id>
     <version>1.0.0</version>
-    <title>Simple301</title>
+    <title>SimpleRedirects</title>
     <authors>Patrick</authors>
     <owners>Patrick</owners>
-    <projectUrl>https://github.com/patrickdemooij9/Simple301</projectUrl>
+    <projectUrl>https://github.com/patrickdemooij9/SimpleRedirects</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Umbraco 301 Redirect Manager for the Umbraco Back-Office</description>
     <releaseNotes>Initial release.</releaseNotes>

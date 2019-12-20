@@ -1,4 +1,4 @@
-﻿using Simple301.Core.Extensions;
+using SimpleRedirects.Core.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Caching;
 
-namespace Simple301.Core.Utilities.Caching
+namespace SimpleRedirects.Core.Utilities.Caching
 {
     /// <summary>
     /// Cache Manager service that provides context and control

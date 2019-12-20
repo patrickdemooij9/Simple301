@@ -1,8 +1,8 @@
-﻿using NPoco;
+using NPoco;
 using System;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
-namespace Simple301.Core.Models
+namespace SimpleRedirects.Core.Models
 {
     [TableName("Redirects")]
     [PrimaryKey("Id", AutoIncrement = true)]

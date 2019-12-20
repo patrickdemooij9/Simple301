@@ -1,10 +1,10 @@
-using Simple301.Core.Components;
+using SimpleRedirects.Core.Components;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
 
-namespace Simple301.Core
+namespace SimpleRedirects.Core
 {
     public class RedirectUserComposer : IUserComposer
     {

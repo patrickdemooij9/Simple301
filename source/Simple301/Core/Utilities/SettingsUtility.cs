@@ -1,9 +1,9 @@
-﻿using Simple301.Core.Extensions;
+using SimpleRedirects.Core.Extensions;
 using System;
 using System.Configuration;
 using System.Linq;
 
-namespace Simple301.Core.Utilities
+namespace SimpleRedirects.Core.Utilities
 {
     /// <summary>
     /// Utility to manage the reading of application

@@ -1,4 +1,4 @@
-﻿namespace Simple301.Core.Models
+namespace SimpleRedirects.Core.Models
 {
     public class AddRedirectResponse
     {

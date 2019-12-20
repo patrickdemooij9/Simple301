@@ -1,4 +1,4 @@
-﻿namespace Simple301.Core.Extensions
+namespace SimpleRedirects.Core.Extensions
 {
     public static class StringExtensions
     {

@@ -1,7 +1,7 @@
 using System;
 using Umbraco.Core.Dashboards;
 
-namespace Simple301.Core
+namespace SimpleRedirects.Core
 {
     public class RedirectDashboard : IDashboard
     {

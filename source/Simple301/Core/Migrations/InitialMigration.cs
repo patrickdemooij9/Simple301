@@ -1,7 +1,7 @@
-﻿using Simple301.Core.Models;
+using SimpleRedirects.Core.Models;
 using Umbraco.Core.Migrations;
 
-namespace Simple301.Core.Migrations
+namespace SimpleRedirects.Core.Migrations
 {
     public class InitialMigration : MigrationBase
     {

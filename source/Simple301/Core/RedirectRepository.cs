@@ -1,15 +1,15 @@
-using Simple301.Core.Models;
+using SimpleRedirects.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core;
-using Simple301.Core.Extensions;
+using SimpleRedirects.Core.Extensions;
 using System.Text.RegularExpressions;
-using Simple301.Core.Utilities;
-using Simple301.Core.Utilities.Caching;
+using SimpleRedirects.Core.Utilities;
+using SimpleRedirects.Core.Utilities.Caching;
 using Umbraco.Core.Scoping;
 
-namespace Simple301.Core
+namespace SimpleRedirects.Core
 {
     /// <summary>
     /// Redirect Repository that handles CRUD operations for the repository collection

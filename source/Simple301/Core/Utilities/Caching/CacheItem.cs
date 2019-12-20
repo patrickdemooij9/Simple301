@@ -1,4 +1,4 @@
-﻿namespace Simple301.Core.Utilities.Caching
+namespace SimpleRedirects.Core.Utilities.Caching
 {
     /// <summary>
     /// Represents a single cached item.

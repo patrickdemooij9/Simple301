@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace Simple301.Core.Models
+namespace SimpleRedirects.Core.Models
 {
     public class UpdateRedirectRequest
     {

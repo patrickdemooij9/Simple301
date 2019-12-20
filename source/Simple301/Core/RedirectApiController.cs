@@ -1,11 +1,11 @@
-﻿using Simple301.Core.Models;
+using SimpleRedirects.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
-namespace Simple301.Core
+namespace SimpleRedirects.Core
 {
     /// <summary>
     /// Main plugin controller for Simple 301 - Redirect Manager.

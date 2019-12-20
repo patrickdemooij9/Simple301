@@ -1,7 +1,7 @@
-﻿using Umbraco.Web.Routing;
+using Umbraco.Web.Routing;
 using System.Linq;
 
-namespace Simple301.Core
+namespace SimpleRedirects.Core
 {
     /// <summary>
     /// Content finder to be injected at the start of the Umbraco pipeline that first

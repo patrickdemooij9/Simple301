@@ -1,6 +1,6 @@
 using Umbraco.Core.Migrations;
 
-namespace Simple301.Core.Migrations
+namespace SimpleRedirects.Core.Migrations
 {
     public class RegexMigration : MigrationBase
     {
