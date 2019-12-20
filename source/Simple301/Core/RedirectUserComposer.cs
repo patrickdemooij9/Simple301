@@ -1,7 +1,8 @@
-﻿using Simple301.Core.Components;
+using Simple301.Core.Components;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Web;
+using Umbraco.Web.Routing;
 
 namespace Simple301.Core
 {
@@ -11,7 +12,8 @@ namespace Simple301.Core
         {
             composition.Dashboards().Add<RedirectDashboard>();
             composition.Components().Append<DatabaseUpgradeComponent>();
-            composition.ContentFinders().Append<RedirectContentFinder>();
+            composition.ContentFinders().InsertBefore<ContentFinderByUrl, RedirectContentFinder>();
+            composition.Register(typeof(RedirectRepository), Lifetime.Request);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Umbraco.Core.Dashboards;
 
 namespace Simple301.Core
@@ -11,6 +11,6 @@ namespace Simple301.Core
 
         public string Alias => "redirectDashboard";
 
-        public string View => "/App_Plugins/SimpleRedirects/app.html";
+        public string View => "/App_Plugins/Simple301/app.html";
     }
 }

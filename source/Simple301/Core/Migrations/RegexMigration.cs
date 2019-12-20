@@ -1,4 +1,4 @@
-﻿using Umbraco.Core.Migrations;
+using Umbraco.Core.Migrations;
 
 namespace Simple301.Core.Migrations
 {
@@ -10,7 +10,10 @@ namespace Simple301.Core.Migrations
 
         public override void Migrate()
         {
-            Alter.Table("Redirects").AddColumn("IsRegex").AsBoolean().Nullable();
+            if (!ColumnExists("Redirects", "IsRegex"))
+            {
+                Alter.Table("Redirects").AddColumn("IsRegex").AsBoolean().Nullable().Do();
+            }
         }
     }
 }

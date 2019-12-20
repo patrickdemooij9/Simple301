@@ -1,4 +1,4 @@
-﻿using Simple301.Core.Models;
+using Simple301.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,29 +82,31 @@ namespace Simple301.Core
             var redirects = FetchRedirects();
             if (!isRegex && DetectLoop(oldUrl, newUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
+            int idObj;
+
             //Add redirect to DB
             using (var scope = _scopeProvider.CreateScope())
             {
-                var idObj = scope.Database.Insert(new Redirect()
+                idObj = Convert.ToInt32(scope.Database.Insert(new Redirect
                 {
                     IsRegex = isRegex,
                     OldUrl = oldUrl,
                     NewUrl = newUrl,
                     LastUpdated = DateTime.Now.ToUniversalTime(),
                     Notes = notes
-                });
+                }));
 
                 scope.Complete();
-
-                //Clear the current cache
-                ClearCache();
-
-                //Fetch the added redirect
-                var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
-
-                //return new redirect
-                return newRedirect;
             }
+
+            //Clear the current cache
+            ClearCache();
+
+            //Fetch the added redirect
+            var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
+
+            //return new redirect
+            return newRedirect;
         }
 
         /// <summary>
@@ -149,7 +151,6 @@ namespace Simple301.Core
                 //return updated redirect
                 return redirect;
             }
-            
         }
 
         /// <summary>
