@@ -310,18 +310,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="Client\package.manifest" />
+    <Content Include="App_Plugins\Simple301\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\app.html" />
-    <Content Include="Client\assets\scripts\app.js" />
-    <Content Include="Client\assets\scripts\vendors.min.js" />
-    <Content Include="Client\assets\styles\styles.min.css" />
-    <Content Include="Client\assets\styles\vendors.min.css" />
+    <Content Include="App_Plugins\Simple301\app.html" />
+    <Content Include="App_Plugins\Simple301\assets\scripts\app.js" />
+    <Content Include="App_Plugins\Simple301\assets\scripts\vendors.min.js" />
+    <Content Include="App_Plugins\Simple301\assets\styles\styles.min.css" />
+    <Content Include="App_Plugins\Simple301\assets\styles\vendors.min.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
