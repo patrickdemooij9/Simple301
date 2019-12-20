@@ -1,11 +1,11 @@
-﻿app.requires.push('ngTable');
+app.requires.push('ngTable');
 
 /*
-* SIMPLE301 CONTROLLER
+* SimpleRedirects CONTROLLER
 * -----------------------------------------------------
 * Main Simple 301 controller used to render out the Simple 301 content section
 */
-angular.module("umbraco").controller("Simple301Controller", function ($scope, $filter, Simple301Api, ngTableParams) {
+angular.module("umbraco").controller("SimpleRedirectsController", function ($scope, $filter, SimpleRedirectsApi, ngTableParams) {
 
     //Property to display error messages
     $scope.errorMessage = '';
@@ -30,14 +30,14 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     */
     $scope.clearCache = function () {
         $scope.cacheCleared = true;
-        return Simple301Api.clearCache().then($scope.fetchRedirects.bind(this));
+        return SimpleRedirectsApi.clearCache().then($scope.fetchRedirects.bind(this));
     }
 
     /*
     * Handles fetching all redirects from the server.
     */
     $scope.fetchRedirects = function () {
-        return Simple301Api.getAll().then($scope.onRecieveAllRedirectsResponse.bind(this));
+        return SimpleRedirectsApi.getAll().then($scope.onRecieveAllRedirectsResponse.bind(this));
     };
 
     /*
@@ -60,7 +60,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * Sends request off to API.
     */
     $scope.addRedirect = function (redirect) {
-        Simple301Api.add(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.Notes)
+        SimpleRedirectsApi.add(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.Notes)
             .then($scope.onAddRedirectResponse.bind(this));
     };
 
@@ -91,7 +91,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * updating the redirects collection server side.
     */
     $scope.updateRedirect = function (redirect) {
-        Simple301Api.update(redirect).then($scope.onUpdateRedirectResponse.bind(this, redirect));
+        SimpleRedirectsApi.update(redirect).then($scope.onUpdateRedirectResponse.bind(this, redirect));
     }
 
     /*
@@ -121,7 +121,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     */
     $scope.deleteRedirect = function (redirect) {
         if (confirm("Are you sure you want to delete this redirect?")) {
-            Simple301Api.remove(redirect.Id).then($scope.onDeleteRedirectResponse.bind(this, redirect));
+            SimpleRedirectsApi.remove(redirect.Id).then($scope.onDeleteRedirectResponse.bind(this, redirect));
         }
     }
 
@@ -238,33 +238,33 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
 });
 
 /*
-* SIMPLE301 API
+* SimpleRedirects API
 * -----------------------------------------------------
 * Resource to handle making requests to the backoffice API to handle CRUD operations
 * for redirect management
 */
-angular.module("umbraco.resources").factory("Simple301Api", function ($http) {
+angular.module("umbraco.resources").factory("SimpleRedirectsApi", function ($http) {
     return {
         //Get all redirects from the server
         getAll: function () {
-            return $http.get("backoffice/Simple301/RedirectApi/GetAll");
+            return $http.get("backoffice/SimpleRedirects/RedirectApi/GetAll");
         },
         //Send data to add a new redirect
         add: function (isRegex, oldUrl, newUrl, notes) {
-            return $http.post("backoffice/Simple301/RedirectApi/Add", JSON.stringify({ isRegex: isRegex, oldUrl: oldUrl, newUrl: newUrl, notes: notes }));
+            return $http.post("backoffice/SimpleRedirects/RedirectApi/Add", JSON.stringify({ isRegex: isRegex, oldUrl: oldUrl, newUrl: newUrl, notes: notes }));
         },
         //Send request to update an existing redirect
         update: function (redirect) {
-            return $http.post("backoffice/Simple301/RedirectApi/Update", JSON.stringify({ redirect: redirect }));
+            return $http.post("backoffice/SimpleRedirects/RedirectApi/Update", JSON.stringify({ redirect: redirect }));
         },
         //Remove / Delete an existing redirect
         remove: function (id) {
-            return $http.delete("backoffice/Simple301/RedirectApi/Delete/" + id);
+            return $http.delete("backoffice/SimpleRedirects/RedirectApi/Delete/" + id);
         },
 
         //Clear cache
         clearCache: function () {
-            return $http.post("backoffice/Simple301/RedirectApi/ClearCache");
+            return $http.post("backoffice/SimpleRedirects/RedirectApi/ClearCache");
         }
     };
 });

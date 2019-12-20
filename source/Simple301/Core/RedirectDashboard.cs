@@ -11,6 +11,6 @@ namespace SimpleRedirects.Core
 
         public string Alias => "redirectDashboard";
 
-        public string View => "/App_Plugins/Simple301/app.html";
+        public string View => "/App_Plugins/SimpleRedirects/app.html";
     }
 }

@@ -5,7 +5,7 @@ namespace SimpleRedirects.Core.Utilities
     /// </summary>
     public static class SettingsKeys
     {
-        public static string CacheDurationKey = "Simple301.CacheDurationInSeconds";
-        public static string CacheEnabledKey = "Simple301.CacheEnabled";
+        public static string CacheDurationKey = "SimpleRedirects.CacheDurationInSeconds";
+        public static string CacheEnabledKey = "SimpleRedirects.CacheEnabled";
     }
 }

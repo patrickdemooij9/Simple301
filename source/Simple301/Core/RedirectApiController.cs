@@ -11,7 +11,7 @@ namespace SimpleRedirects.Core
     /// Main plugin controller for Simple 301 - Redirect Manager.
     /// Handles making calls to the Redirect Repository for CRUD operations
     /// </summary>
-    [PluginController("Simple301")]
+    [PluginController("SimpleRedirects")]
     public class RedirectApiController : UmbracoAuthorizedApiController
     {
         private readonly RedirectRepository _redirectRepository;
