@@ -61,18 +61,18 @@ namespace SimpleRedirects.Core
         /// <param name="newUrl">New Url to redirect to</param>
         /// <param name="notes">Any associated notes with this redirect</param>
         /// <returns>New redirect from DB if successful</returns>
-        public Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, string type, string notes)
+        public Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, int redirectCode, string notes)
         {
             if (!oldUrl.IsSet()) throw new ArgumentNullException("oldUrl");
             if (!newUrl.IsSet()) throw new ArgumentNullException("newUrl");
-            if (!type.IsSet()) throw new ArgumentNullException("type");
+
+            //Check if type is a valid redirect response status
+            if (!redirectCode.Equals((int)HttpStatusCode.Redirect) && !redirectCode.Equals((int)HttpStatusCode.MovedPermanently))
+                throw new ArgumentException("You can only choose the 301 & 302 status code!");
 
             //Ensure starting slash if not regex
             if(!isRegex)
                 oldUrl = oldUrl.EnsurePrefix("/").ToLower();
-
-            //Check if type is a valid redirect response status
-            if (type.Equals(HttpStatusCode.TemporaryRedirect))
 
             // Allow external redirects and ensure slash if not absolute
             newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
@@ -97,6 +97,7 @@ namespace SimpleRedirects.Core
                     IsRegex = isRegex,
                     OldUrl = oldUrl,
                     NewUrl = newUrl,
+                    RedirectCode = redirectCode,
                     LastUpdated = DateTime.Now.ToUniversalTime(),
                     Notes = notes
                 }));
@@ -125,8 +126,12 @@ namespace SimpleRedirects.Core
             if (!redirect.OldUrl.IsSet()) throw new ArgumentNullException("redirect.OldUrl");
             if (!redirect.NewUrl.IsSet()) throw new ArgumentNullException("redirect.NewUrl");
 
+            //Check if type is a valid redirect response status
+            if (!redirect.RedirectCode.Equals((int)HttpStatusCode.Redirect) && !redirect.RedirectCode.Equals((int)HttpStatusCode.MovedPermanently))
+                throw new ArgumentException("You can only choose the 301 & 302 status code!");
+
             //Ensure starting slash
-            if(!redirect.IsRegex)
+            if (!redirect.IsRegex)
                 redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
 
             // Allow external redirects and ensure slash if not absolute
@@ -299,7 +304,6 @@ namespace SimpleRedirects.Core
             {
                 return scope.Database.Query<Redirect>(query, param).ToList();
             }
-            
         }
 
         /// <summary>

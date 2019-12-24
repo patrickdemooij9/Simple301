@@ -44,7 +44,7 @@ namespace SimpleRedirects.Core
 
             try
             {
-                var redirect = _redirectRepository.AddRedirect(request.IsRegex, request.OldUrl, request.NewUrl, request.Notes);
+                var redirect = _redirectRepository.AddRedirect(request.IsRegex, request.OldUrl, request.NewUrl, request.RedirectCode, request.Notes);
                 return new AddRedirectResponse() { Success = true, NewRedirect = redirect };
             }
             catch(Exception e)

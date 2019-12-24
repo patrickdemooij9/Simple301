@@ -22,6 +22,9 @@ namespace SimpleRedirects.Core.Models
         [Column("NewUrl")]
         public string NewUrl { get; set; }
 
+        [Column("RedirectCode")]
+        public int RedirectCode { get; set; }
+
         [Column("LastUpdated")]
         public DateTime LastUpdated { get; set; }
 

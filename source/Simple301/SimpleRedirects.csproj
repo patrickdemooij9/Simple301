@@ -291,6 +291,7 @@
     <Compile Include="Core\Extensions\StringExtensions.cs" />
     <Compile Include="Core\Migrations\InitialMigration.cs" />
     <Compile Include="Core\Migrations\RegexMigration.cs" />
+    <Compile Include="Core\Migrations\RedirectCodeMigration.cs" />
     <Compile Include="Core\Models\AddRedirectRequest.cs" />
     <Compile Include="Core\Models\AddRedirectResponse.cs" />
     <Compile Include="Core\Models\DeleteRedirectResponse.cs" />
@@ -310,6 +311,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="App_Plugins\SimpleRedirects\assets\lang\en.xml" />
     <Content Include="App_Plugins\SimpleRedirects\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>

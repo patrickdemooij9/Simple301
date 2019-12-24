@@ -28,7 +28,8 @@ namespace SimpleRedirects.Core.Components
             var plan = new MigrationPlan("SimpleRedirectsMigration");
             plan.From(string.Empty)
                 .To<InitialMigration>("state-1")
-                .To<RegexMigration>("state-2");
+                .To<RegexMigration>("state-2")
+                .To<RedirectCodeMigration>("state-3");
 
             var upgrader = new Upgrader(plan);
             upgrader.Execute(_scopeProvider, _migrationBuilder, _keyValueService, _logger);

@@ -1,5 +1,6 @@
 using Umbraco.Web.Routing;
 using System.Linq;
+using System.Net;
 
 namespace SimpleRedirects.Core
 {
@@ -25,8 +26,8 @@ namespace SimpleRedirects.Core
             var matchedRedirect = _repository.FindRedirect(path);
             if (matchedRedirect == null) return false;
 
-            //Found one, set the 301 redirect on the request and return
-            request.SetRedirectPermanent(matchedRedirect.NewUrl);
+            request.SetRedirect(matchedRedirect.NewUrl, matchedRedirect.RedirectCode);
+
             return true;
         }
     }

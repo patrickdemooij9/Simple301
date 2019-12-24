@@ -65,11 +65,11 @@
                                         <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.NewUrl" placeholder="New Url" no-dirty-check /></div>
                                     </td>
                                     <td data-title="'Type'" sortable="'Type'">
-                                        <span ng-if="!item.$edit">{{item.Type}}</span>
+                                        <span ng-if="!item.$edit">{{item.RedirectCode == 301 ? 'Permanent' : 'Temporary'}}</span>
                                         <div ng-if="item.$edit">
-                                            <select class="form-control" type="text" ng-model="item.Type" placeholder="Type" no-dirty-check>
-                                                <option value="301">Permanent</option>
-                                                <option value="302">Temporary</option>
+                                            <select class="form-control" type="text" ng-model="item.RedirectCode" placeholder="Type" no-dirty-check>
+                                                <option ng-value="301">Permanent</option>
+                                                <option ng-value="302">Temporary</option>
                                             </select>
                                         </div>
                                     </td>

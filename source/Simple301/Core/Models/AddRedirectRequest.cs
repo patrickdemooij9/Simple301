@@ -13,7 +13,7 @@ namespace SimpleRedirects.Core.Models
         public string NewUrl { get; set; }
 
         [Required]
-        public string Type { get; set; }
+        public int RedirectCode { get; set; }
 
         public string Notes { get; set; }
     }
