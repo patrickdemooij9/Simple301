@@ -135,7 +135,7 @@ namespace SimpleRedirects.Core
                 throw new ArgumentException("You can only choose the 301 & 302 status code!");
 
             //Ensure starting slash
-            if (!redirect.IsRegex)
+            if (!redirect.IsRegex && Uri.IsWellFormedUriString(redirect.OldUrl, UriKind.Relative))
                 redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
 
             // Allow external redirects and ensure slash if not absolute
