@@ -202,7 +202,7 @@ namespace SimpleRedirects.Core
 
             foreach (var regexRedirect in regexRedirects)
             {
-                if (Regex.IsMatch(oldUrl.AbsolutePath, regexRedirect.OldUrl)) return regexRedirect;
+                if (Regex.IsMatch(oldUrl.AbsoluteUri, regexRedirect.OldUrl)) return regexRedirect;
             }
 
             return null;
