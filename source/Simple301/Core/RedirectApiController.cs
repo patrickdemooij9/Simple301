@@ -1,7 +1,7 @@
 using SimpleRedirects.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
+using System.Web.Http;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
