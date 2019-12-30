@@ -2,12 +2,16 @@ using SimpleRedirects.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using Umbraco.Core;
 using SimpleRedirects.Core.Extensions;
 using System.Text.RegularExpressions;
+using System.Xml;
+using NPoco;
 using SimpleRedirects.Core.Utilities;
 using SimpleRedirects.Core.Utilities.Caching;
+using Umbraco.Core.Persistence;
 using Umbraco.Core.Scoping;
 
 namespace SimpleRedirects.Core
@@ -71,12 +75,12 @@ namespace SimpleRedirects.Core
                 throw new ArgumentException("You can only choose the 301 & 302 status code!");
 
             //Ensure starting slash if not regex
-            if(!isRegex)
+            if (!isRegex && Uri.IsWellFormedUriString(oldUrl, UriKind.Relative))
                 oldUrl = oldUrl.EnsurePrefix("/").ToLower();
 
             // Allow external redirects and ensure slash if not absolute
             newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
-                newUrl : 
+                newUrl :
                 newUrl.EnsurePrefix("/").ToLower();
 
             // First look for single match
@@ -188,17 +192,17 @@ namespace SimpleRedirects.Core
         /// </summary>
         /// <param name="oldUrl">Url to search for</param>
         /// <returns>Matched Redirect</returns>
-        public Redirect FindRedirect(string oldUrl)
+        public Redirect FindRedirect(Uri oldUrl)
         {
-            var matchedRedirect = FetchRedirectByOldUrl(oldUrl, fromCache: true);
+            var matchedRedirect = FetchRedirectByOldUri(oldUrl, fromCache: true);
             if (matchedRedirect != null) return matchedRedirect;
 
             // fetch regex redirects
             var regexRedirects = FetchRegexRedirects(fromCache: true);
 
-            foreach(var regexRedirect in regexRedirects)
+            foreach (var regexRedirect in regexRedirects)
             {
-                if (Regex.IsMatch(oldUrl,regexRedirect.OldUrl)) return regexRedirect;
+                if (Regex.IsMatch(oldUrl.AbsolutePath, regexRedirect.OldUrl)) return regexRedirect;
             }
 
             return null;
@@ -220,13 +224,12 @@ namespace SimpleRedirects.Core
         /// Fetches all redirects through cache layer
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        private Dictionary<string,Redirect> FetchRedirects(bool fromCache = false)
+        private Dictionary<string, Redirect> FetchRedirects(bool fromCache = false)
         {
             // if from cache, make sure we add if it doesn't exist
-            if (fromCache)
-                return _cacheManager.GetAndSet(CACHE_CATEGORY, CACHE_ALL_KEY, () => FetchRedirectsFromDb());
-
-            return FetchRedirectsFromDb();
+            return fromCache
+                ? _cacheManager.GetAndSet(CACHE_CATEGORY, CACHE_ALL_KEY, FetchRedirectsFromDb)
+                : FetchRedirectsFromDb();
         }
 
         /// <summary>
@@ -236,12 +239,9 @@ namespace SimpleRedirects.Core
         /// <returns>Single redirect with matching Id</returns>
         private Redirect FetchRedirectById(int id, bool fromCache = false)
         {
-            var query = "SELECT * FROM Redirects WHERE Id=@0";
-
-            if (fromCache)
-                return _cacheManager.GetAndSet(CACHE_CATEGORY, "Id:" + id, () => FetchRedirectFromDbByQuery(query, id));
-
-            return FetchRedirectFromDbByQuery(query, id);
+            return fromCache
+                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "Id:" + id, () => FetchRedirectFromDbByQuery(x => x.Id == id))
+                : FetchRedirectFromDbByQuery(x => x.Id == id);
         }
 
         /// <summary>
@@ -251,12 +251,19 @@ namespace SimpleRedirects.Core
         /// <returns>Single redirect with matching OldUrl</returns>
         private Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
         {
-            var query = "SELECT * FROM Redirects WHERE OldUrl=@0";
+            return fromCache
+                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "OldUrl:" + oldUrl,
+                    () => FetchRedirectFromDbByQuery(x => x.OldUrl == oldUrl))
+                : FetchRedirectFromDbByQuery(x => x.OldUrl == oldUrl);
+        }
 
-            if (fromCache)
-                return _cacheManager.GetAndSet(CACHE_CATEGORY, "OldUrl:" + oldUrl, () => FetchRedirectFromDbByQuery(query, oldUrl));
-
-            return FetchRedirectFromDbByQuery(query, oldUrl);
+        private Redirect FetchRedirectByOldUri(Uri oldUrl, bool fromCache = false)
+        {
+            return fromCache
+                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "UriRedirects" + oldUrl.AbsoluteUri,
+                    () => FetchRedirectFromDbByQuery(x =>
+                        x.OldUrl == oldUrl.AbsoluteUri.ToLower() || x.OldUrl == oldUrl.PathAndQuery.ToLower()))
+                : FetchRedirectFromDbByQuery(x => x.OldUrl == oldUrl.AbsolutePath || x.OldUrl == oldUrl.PathAndQuery);
         }
 
         /// <summary>
@@ -266,27 +273,22 @@ namespace SimpleRedirects.Core
         /// <returns>Collection or regex redirects</returns>
         private List<Redirect> FetchRegexRedirects(bool fromCache = false)
         {
-            var query = "SELECT * FROM Redirects WHERE IsRegex=@0";
-
-            if (fromCache)
-                return _cacheManager.GetAndSet(CACHE_CATEGORY, "RegexRedirects", () => FetchRedirectsFromDbByQuery(query, true));
-
-            return FetchRedirectsFromDbByQuery(query, true);
+            return fromCache
+                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "RegexRedirects",
+                    () => FetchRedirectsFromDbByQuery(x => x.IsRegex).ToList())
+                : FetchRedirectsFromDbByQuery(x => x.IsRegex).ToList();
         }
 
         /// <summary>
         /// Handles fetching a single redirect from the DB based
         /// on the provided query and parameter
         /// </summary>
-        /// <typeparam name="T">Datatype of param</typeparam>
-        /// <param name="query">Query</param>
-        /// <param name="param">Param value</param>
         /// <returns>Redirect</returns>
-        private Redirect FetchRedirectFromDbByQuery<T>(string query, T param)
+        private Redirect FetchRedirectFromDbByQuery(Expression<Func<Redirect, bool>> expression)
         {
             using (var scope = _scopeProvider.CreateScope())
             {
-                return scope.Database.FirstOrDefault<Redirect>(query, param);
+                return scope.Database.FirstOrDefault<Redirect>(scope.SqlContext.Sql().From<Redirect>().Where(expression));
             }
         }
 
@@ -294,16 +296,22 @@ namespace SimpleRedirects.Core
         /// Handles fetching a collection of redirects from the DB based
         /// on the provided query and parameter
         /// </summary>
-        /// <typeparam name="T">Datatype of param</typeparam>
-        /// <param name="query">Query</param>
-        /// <param name="param">Param value</param>
         /// <returns>Collection of redirects</returns>
-        private List<Redirect> FetchRedirectsFromDbByQuery<T>(string query, T param)
+        private IEnumerable<Redirect> FetchRedirectsFromDbByQuery(Expression<Func<Redirect, bool>> expression)
         {
+            IEnumerable<Redirect> results;
             using (var scope = _scopeProvider.CreateScope())
             {
-                return scope.Database.Query<Redirect>(query, param).ToList();
+                results = scope.Database.Fetch<Redirect>
+                (scope.SqlContext.Sql()
+                    .SelectAll()
+                    .From<Redirect>()
+                    .Where(expression)
+                );
+
+                scope.Complete();
             }
+            return results;
         }
 
         /// <summary>

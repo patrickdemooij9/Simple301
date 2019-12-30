@@ -19,11 +19,8 @@ namespace SimpleRedirects.Core
 
         public bool TryFindContent(PublishedRequest request)
         {
-            //Get the requested URL path + query
-            var path = request.Uri.PathAndQuery.ToLower();
-
             //Check the table
-            var matchedRedirect = _repository.FindRedirect(path);
+            var matchedRedirect = _repository.FindRedirect(request.Uri);
             if (matchedRedirect == null) return false;
 
             request.SetRedirect(matchedRedirect.NewUrl, matchedRedirect.RedirectCode);
