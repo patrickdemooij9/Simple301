@@ -23,7 +23,7 @@ namespace SimpleRedirects.Core
             var matchedRedirect = _repository.FindRedirect(request.Uri);
             if (matchedRedirect == null) return false;
 
-            request.SetRedirect(matchedRedirect.NewUrl, matchedRedirect.RedirectCode);
+            request.SetRedirect(matchedRedirect.GetNewUrl(request.Uri), matchedRedirect.RedirectCode);
 
             return true;
         }

@@ -1,5 +1,6 @@
 using NPoco;
 using System;
+using System.Text.RegularExpressions;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace SimpleRedirects.Core.Models
@@ -30,5 +31,28 @@ namespace SimpleRedirects.Core.Models
 
         [Column("Notes")]
         public string Notes { get; set; }
+
+        public string GetNewUrl(Uri uri)
+        {
+            if (!IsRegex || !NewUrl.Contains($"$"))
+                return NewUrl;
+
+            try
+            {
+                var regexNewUrl = NewUrl;
+                var match = Regex.Match(uri.AbsoluteUri, OldUrl);
+
+                for (var i = 1; i < match.Groups.Count; i++)
+                {
+                    regexNewUrl = regexNewUrl.Replace($"${i}", match.Groups[i].Value);
+                }
+
+                return regexNewUrl;
+            }
+            catch (Exception)
+            {
+                return NewUrl;
+            }
+        }
     }
 }

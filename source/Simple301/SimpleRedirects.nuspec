@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>SimpleRedirects</id>
-    <version>1.0.0</version>
-    <title>SimpleRedirects</title>
+    <id>TheValley.SimpleRedirects</id>
+    <version>1.0.6</version>
+    <title>TheValley.SimpleRedirects</title>
     <authors>Patrick</authors>
     <owners>Patrick</owners>
     <projectUrl>https://github.com/patrickdemooij9/SimpleRedirects</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Umbraco 301 Redirect Manager for the Umbraco Back-Office</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <description>Umbraco Redirect Manager for the Umbraco Back-Office</description>
+    <releaseNotes>Removed some references.</releaseNotes>
   </metadata>
 </package>
