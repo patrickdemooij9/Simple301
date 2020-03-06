@@ -52,7 +52,7 @@
                         <table ng-table="tableParams" template-header="header" template-pagination="pager" class="table table-full table-full-small">
                             <tbody>
                                 <tr ng-repeat="item in $data">
-                                    <td data-title="'Regex'">
+                                    <td data-title="'Regex'" sortable="'IsRegex'">
                                         <input class="form-control" type="checkbox" ng-model="item.IsRegex" ng-disabled="!item.$edit" no-dirty-check />
                                     </td>
                                     <td data-title="'Old Url'" sortable="'OldUrl'">
@@ -64,7 +64,7 @@
                                         <a ng-if="!item.$edit" href="{{item.NewUrl}}" target="_blank">{{item.NewUrl}}</a>
                                         <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.NewUrl" placeholder="New Url" no-dirty-check /></div>
                                     </td>
-                                    <td data-title="'Type'" sortable="'Type'">
+                                    <td data-title="'Type'" sortable="'RedirectCode'">
                                         <span ng-if="!item.$edit">{{item.RedirectCode == 301 ? 'Permanent' : 'Temporary'}}</span>
                                         <div ng-if="item.$edit">
                                             <select class="form-control" type="text" ng-model="item.RedirectCode" placeholder="Type" no-dirty-check>
