@@ -21,7 +21,6 @@ namespace SimpleRedirects.Core
         public bool TryFindContent(PublishedRequest request)
         {
             //Check the table
-            Current.Logger.Info(typeof(RedirectContentFinder), "Request: " + request.Uri.ToString());
             var matchedRedirect = _repository.FindRedirect(request.Uri);
             if (matchedRedirect == null) return false;
 

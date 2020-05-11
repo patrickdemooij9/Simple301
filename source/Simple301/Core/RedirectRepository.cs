@@ -268,7 +268,6 @@ namespace SimpleRedirects.Core
         {
             var absoluteUri = CleanUrl(oldUrl.AbsoluteUri);
             var pathAndQuery = CleanUrl(oldUrl.PathAndQuery);
-            Current.Logger.Info(typeof(RedirectRepository), "AbsoluteUri: " + absoluteUri + " pathAndQuery: " + pathAndQuery);
             return fromCache
                 ? _cacheManager.GetAndSet(CACHE_CATEGORY, "UriRedirects" + oldUrl.AbsoluteUri,
                     () => FetchRedirectFromDbByQuery(x =>

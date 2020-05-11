@@ -1,8 +1,7 @@
-using System;
 using System.Linq;
 using SimpleRedirects.Core.Models;
 using Umbraco.Core.Migrations;
-using Umbraco.Core.Persistence.Repositories;
+using Umbraco.Core.Persistence;
 
 namespace SimpleRedirects.Core.Migrations
 {
@@ -16,8 +15,11 @@ namespace SimpleRedirects.Core.Migrations
         {
             if (!TableExists("Redirects")) return;
 
-            var redirects = Database.Query<Redirect>("SELECT * FROM Redirects");
-            foreach (var redirect in redirects.Where(it => !it.IsRegex))
+            var redirects = Database.Fetch<Redirect>(Database.SqlContext.Sql()
+                .SelectAll()
+                .From<Redirect>()
+                .Where<Redirect>(it => !it.IsRegex));
+            foreach (var redirect in redirects)
             {
                 redirect.OldUrl = CleanUrl(redirect.OldUrl);
                 Database.Update(redirect);
