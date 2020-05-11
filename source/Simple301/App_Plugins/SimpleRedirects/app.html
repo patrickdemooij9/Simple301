@@ -56,8 +56,8 @@
                                         <input class="form-control" type="checkbox" ng-model="item.IsRegex" ng-disabled="!item.$edit" no-dirty-check />
                                     </td>
                                     <td data-title="'Old Url'" sortable="'OldUrl'">
-                                        <span ng-if="!item.$edit && item.IsRegex">{{item.OldUrl}}</span>
-                                        <a ng-if="!item.$edit && !item.IsRegex" href="{{item.OldUrl}}" target="_blank">{{item.OldUrl}}</a>
+                                        <span ng-if="!item.$edit && item.IsRegex">{{item.OldUrl != '' ? item.OldUrl : '/'}}</span>
+                                        <a ng-if="!item.$edit && !item.IsRegex" href="{{item.OldUrl != '' ? item.OldUrl : '/'}}" target="_blank">{{item.OldUrl != '' ? item.OldUrl : '/'}}</a>
                                         <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.OldUrl" placeholder="Old Url" no-dirty-check /></div>
                                     </td>
                                     <td data-title="'New Url'" sortable="'NewUrl'">

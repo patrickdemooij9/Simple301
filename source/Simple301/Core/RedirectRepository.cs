@@ -11,6 +11,7 @@ using System.Xml;
 using NPoco;
 using SimpleRedirects.Core.Utilities;
 using SimpleRedirects.Core.Utilities.Caching;
+using Umbraco.Core.Composing;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Scoping;
 
@@ -74,9 +75,12 @@ namespace SimpleRedirects.Core
             if (!redirectCode.Equals((int)HttpStatusCode.Redirect) && !redirectCode.Equals((int)HttpStatusCode.MovedPermanently))
                 throw new ArgumentException("You can only choose the 301 & 302 status code!");
 
+            if (!isRegex)
+                oldUrl = CleanUrl(oldUrl);
+
             //Ensure starting slash if not regex
             if (!isRegex && Uri.IsWellFormedUriString(oldUrl, UriKind.Relative))
-                oldUrl = oldUrl.EnsurePrefix("/").ToLower();
+                oldUrl = oldUrl.EnsurePrefix("/");
 
             // Allow external redirects and ensure slash if not absolute
             newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
@@ -130,6 +134,9 @@ namespace SimpleRedirects.Core
             if (!redirect.OldUrl.IsSet()) throw new ArgumentNullException("redirect.OldUrl");
             if (!redirect.NewUrl.IsSet()) throw new ArgumentNullException("redirect.NewUrl");
 
+            if (!redirect.IsRegex)
+                redirect.OldUrl = CleanUrl(redirect.OldUrl);
+
             //Check if type is a valid redirect response status
             if (!redirect.RedirectCode.Equals((int)HttpStatusCode.Redirect) && !redirect.RedirectCode.Equals((int)HttpStatusCode.MovedPermanently))
                 throw new ArgumentException("You can only choose the 301 & 302 status code!");
@@ -142,7 +149,6 @@ namespace SimpleRedirects.Core
             redirect.NewUrl = Uri.IsWellFormedUriString(redirect.NewUrl, UriKind.Absolute) ?
                 redirect.NewUrl :
                 redirect.NewUrl.EnsurePrefix("/").ToLower();
-
 
             // First check if a single existing redirect
             var existingRedirect = FetchRedirectByOldUrl(redirect.OldUrl);
@@ -251,6 +257,7 @@ namespace SimpleRedirects.Core
         /// <returns>Single redirect with matching OldUrl</returns>
         private Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
         {
+            oldUrl = CleanUrl(oldUrl);
             return fromCache
                 ? _cacheManager.GetAndSet(CACHE_CATEGORY, "OldUrl:" + oldUrl,
                     () => FetchRedirectFromDbByQuery(x => x.OldUrl == oldUrl))
@@ -259,11 +266,14 @@ namespace SimpleRedirects.Core
 
         private Redirect FetchRedirectByOldUri(Uri oldUrl, bool fromCache = false)
         {
+            var absoluteUri = CleanUrl(oldUrl.AbsoluteUri);
+            var pathAndQuery = CleanUrl(oldUrl.PathAndQuery);
+            Current.Logger.Info(typeof(RedirectRepository), "AbsoluteUri: " + absoluteUri + " pathAndQuery: " + pathAndQuery);
             return fromCache
                 ? _cacheManager.GetAndSet(CACHE_CATEGORY, "UriRedirects" + oldUrl.AbsoluteUri,
                     () => FetchRedirectFromDbByQuery(x =>
-                        x.OldUrl == oldUrl.AbsoluteUri.ToLower() || x.OldUrl == oldUrl.PathAndQuery.ToLower()))
-                : FetchRedirectFromDbByQuery(x => x.OldUrl == oldUrl.AbsolutePath || x.OldUrl == oldUrl.PathAndQuery);
+                        x.OldUrl == absoluteUri || x.OldUrl == pathAndQuery))
+                : FetchRedirectFromDbByQuery(x => x.OldUrl == absoluteUri || x.OldUrl == pathAndQuery);
         }
 
         /// <summary>
@@ -325,6 +335,13 @@ namespace SimpleRedirects.Core
                 var redirects = scope.Database.Query<Redirect>("SELECT * FROM Redirects");
                 return redirects != null ? redirects.ToDictionary(x => x.OldUrl) : new Dictionary<string, Redirect>();
             }
+        }
+
+        private string CleanUrl(string url)
+        {
+            var urlParts = url.ToLowerInvariant().Split('?');
+            var baseUrl = urlParts[0].TrimEnd('/');
+            return urlParts.Length == 1 ? baseUrl : $"{baseUrl}?{string.Join("?", urlParts.Skip(1))}";
         }
 
         /// <summary>

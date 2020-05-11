@@ -252,6 +252,7 @@
     <Compile Include="Core\Migrations\InitialMigration.cs" />
     <Compile Include="Core\Migrations\RegexMigration.cs" />
     <Compile Include="Core\Migrations\RedirectCodeMigration.cs" />
+    <Compile Include="Core\Migrations\TrimOldUrlMigration.cs" />
     <Compile Include="Core\Models\AddRedirectRequest.cs" />
     <Compile Include="Core\Models\AddRedirectResponse.cs" />
     <Compile Include="Core\Models\DeleteRedirectResponse.cs" />
