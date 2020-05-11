@@ -1,6 +1,7 @@
 using Umbraco.Web.Routing;
 using System.Linq;
 using System.Net;
+using Umbraco.Core.Composing;
 
 namespace SimpleRedirects.Core
 {
