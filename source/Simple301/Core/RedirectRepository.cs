@@ -24,29 +24,15 @@ namespace SimpleRedirects.Core
     /// </summary>
     public class RedirectRepository
     {
-        private CacheManager _cacheManager;
-        private const int DEFAULT_CACHE_DURATION = 86400;
-        private const string CACHE_CATEGORY = "Redirects";
-        private const string CACHE_ALL_KEY = "AllRedirects";
+        private readonly ICacheManager _cacheManager;
+        private const string CacheCategoryKey = "Redirects";
 
         private readonly IScopeProvider _scopeProvider;
 
-        public RedirectRepository(IScopeProvider scopeProvider)
+        public RedirectRepository(IScopeProvider scopeProvider, ICacheManager cacheManager)
         {
             _scopeProvider = scopeProvider;
-
-            var settingsUtility = new SettingsUtility();
-
-            // define the cache duration
-            var cacheDuration = settingsUtility.AppSettingExists(SettingsKeys.CacheDurationKey) ?
-                settingsUtility.GetAppSetting<int>(SettingsKeys.CacheDurationKey) : DEFAULT_CACHE_DURATION;
-
-            // define cache enabled
-            var cacheEnabled = settingsUtility.AppSettingExists(SettingsKeys.CacheEnabledKey) ?
-                settingsUtility.GetAppSetting<bool>(SettingsKeys.CacheEnabledKey) :
-                true;
-
-            _cacheManager = new CacheManager(cacheDuration, cacheEnabled);
+            _cacheManager = cacheManager;
         }
 
         /// <summary>
@@ -219,11 +205,7 @@ namespace SimpleRedirects.Core
         /// </summary>
         public void ClearCache()
         {
-            // Delete all items in redirect category
-            _cacheManager.GetCacheItems()
-                .Where(x => x.Category.Equals(CACHE_CATEGORY))
-                .ToList()
-                .ForEach(x => _cacheManager.DeleteItem(x.Category, x.Key));
+            _cacheManager.ClearByKeyPrefix(CacheCategoryKey);
         }
 
         /// <summary>
@@ -234,7 +216,7 @@ namespace SimpleRedirects.Core
         {
             // if from cache, make sure we add if it doesn't exist
             return fromCache
-                ? _cacheManager.GetAndSet(CACHE_CATEGORY, CACHE_ALL_KEY, FetchRedirectsFromDb)
+                ? _cacheManager.GetCacheItem($"{CacheCategoryKey}_All", FetchRedirectsFromDb)
                 : FetchRedirectsFromDb();
         }
 
@@ -246,7 +228,7 @@ namespace SimpleRedirects.Core
         private Redirect FetchRedirectById(int id, bool fromCache = false)
         {
             return fromCache
-                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "Id:" + id, () => FetchRedirectFromDbByQuery(x => x.Id == id))
+                ? _cacheManager.GetCacheItem($"{CacheCategoryKey}_id_{id}", () => FetchRedirectFromDbByQuery(x => x.Id == id))
                 : FetchRedirectFromDbByQuery(x => x.Id == id);
         }
 
@@ -259,7 +241,7 @@ namespace SimpleRedirects.Core
         {
             oldUrl = CleanUrl(oldUrl);
             return fromCache
-                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "OldUrl:" + oldUrl,
+                ? _cacheManager.GetCacheItem($"{CacheCategoryKey}_oldUrl_{oldUrl}",
                     () => FetchRedirectFromDbByQuery(x => x.OldUrl == oldUrl))
                 : FetchRedirectFromDbByQuery(x => x.OldUrl == oldUrl);
         }
@@ -269,7 +251,7 @@ namespace SimpleRedirects.Core
             var absoluteUri = CleanUrl(oldUrl.AbsoluteUri);
             var pathAndQuery = CleanUrl(oldUrl.PathAndQuery);
             return fromCache
-                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "UriRedirects" + oldUrl.AbsoluteUri,
+                ? _cacheManager.GetCacheItem($"{CacheCategoryKey}_uriRedirects_{oldUrl.AbsoluteUri}",
                     () => FetchRedirectFromDbByQuery(x =>
                         x.OldUrl == absoluteUri || x.OldUrl == pathAndQuery))
                 : FetchRedirectFromDbByQuery(x => x.OldUrl == absoluteUri || x.OldUrl == pathAndQuery);
@@ -283,7 +265,7 @@ namespace SimpleRedirects.Core
         private List<Redirect> FetchRegexRedirects(bool fromCache = false)
         {
             return fromCache
-                ? _cacheManager.GetAndSet(CACHE_CATEGORY, "RegexRedirects",
+                ? _cacheManager.GetCacheItem($"{CacheCategoryKey}_regexRedirects",
                     () => FetchRedirectsFromDbByQuery(x => x.IsRegex).ToList())
                 : FetchRedirectsFromDbByQuery(x => x.IsRegex).ToList();
         }

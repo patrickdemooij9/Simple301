@@ -1,4 +1,5 @@
 using SimpleRedirects.Core.Components;
+using SimpleRedirects.Core.Utilities.Caching;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Web;
@@ -14,6 +15,7 @@ namespace SimpleRedirects.Core
             composition.Components().Append<DatabaseUpgradeComponent>();
             composition.ContentFinders().InsertBefore<ContentFinderByUrl, RedirectContentFinder>();
             composition.Register(typeof(RedirectRepository), Lifetime.Request);
+            composition.Register(typeof(ICacheManager), typeof(CacheManager));
         }
     }
 }

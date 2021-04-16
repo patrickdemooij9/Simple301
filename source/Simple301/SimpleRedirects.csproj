@@ -264,9 +264,8 @@
     <Compile Include="Core\RedirectDashboard.cs" />
     <Compile Include="Core\RedirectRepository.cs" />
     <Compile Include="Core\RedirectUserComposer.cs" />
-    <Compile Include="Core\Utilities\Caching\CacheItem.cs" />
     <Compile Include="Core\Utilities\Caching\CacheManager.cs" />
-    <Compile Include="Core\Utilities\Caching\CacheManagerStatus.cs" />
+    <Compile Include="Core\Utilities\Caching\ICacheManager.cs" />
     <Compile Include="Core\Utilities\SettingsKeys.cs" />
     <Compile Include="Core\Utilities\SettingsUtility.cs" />
   </ItemGroup>
