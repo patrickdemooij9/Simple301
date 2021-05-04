@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<umbPackage>
+  <info>
+    <package>
+      <name>SimpleRedirects</name>
+      <version>2.0.0</version>
+      <iconUrl>https://github.com/patrickdemooij9/SimpleRedirects/blob/v9/main/package/simpleRedirectsLogo.png</iconUrl>
+      <licence url="https://github.com/patrickdemooij9/SimpleRedirects/blob/v9/main/LICENSE">Apache License 2.0</licence>
+      <url>https://our.umbraco.com/packages/backoffice-extensions/simpleredirects/</url>
+      <requirements type="strict">
+        <major>9</major>
+        <minor>0</minor>
+        <patch>0</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>Patrick</name>
+      <website>https://our.umbraco.com/members/patrickdemooij9/</website>
+    </author>
+    <readme><![CDATA[Umbraco package for easily creating your redirects within Umbraco]]></readme>
+  </info>
+  <files>
+    <folder path="source/SimpleRedirects/App_Plugins/SimpleRedirects" orgPath="App_Plugins/SimpleRedirects" /> 
+    <file path="source/SimpleRedirects/bin/Release/net5.0/SimpleRedirects.dll" orgPath="bin/SimpleRedirects.dll" />
+    <file path="source/SimpleRedirects.Core/bin/Release/net5.0/SimpleRedirects.Core.dll" orgPath="bin/SimpleRedirects.Core.dll" />
+  </files>
+  <Actions />
+  <control />
+  <DocumentTypes />
+  <Templates />
+  <Stylesheets />
+  <Macros />
+  <DictionaryItems />
+  <Languages />
+  <DataTypes />
+</umbPackage>
