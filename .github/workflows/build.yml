@@ -35,10 +35,10 @@ jobs:
       run: dotnet build ./source/SimpleRedirects.sln --configuration ${{ env.CONFIG }} --no-restore
       
     - name: Create NuGet package file for Core
-      run: dotnet pack ./source/SimpleRedirects.Core/SimpleRedirects.Core.csproj -c ${{ env.CONFIG }} --no-build --include-symbols -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
+      run: dotnet pack ./source/SimpleRedirects.Core/SimpleRedirects.Core.csproj -c ${{ env.CONFIG }} --no-build -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
     
     - name: Create NuGet package file for Backoffice
-      run: dotnet pack ./source/SimpleRedirects/SimpleRedirects.csproj -c ${{ env.CONFIG }} --no-build --include-symbols -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
+      run: dotnet pack ./source/SimpleRedirects/SimpleRedirects.csproj -c ${{ env.CONFIG }} --no-build -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
    
     - name: Push packages to NuGet
       run: dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_DEPLOY_KEY }} -s https://api.nuget.org/v3/index.json
