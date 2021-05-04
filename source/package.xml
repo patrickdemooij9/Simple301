@@ -20,9 +20,9 @@
     <readme><![CDATA[Umbraco package for easily creating your redirects within Umbraco]]></readme>
   </info>
   <files>
-    <folder path="source/SimpleRedirects/App_Plugins/SimpleRedirects" orgPath="App_Plugins/SimpleRedirects" /> 
-    <file path="source/SimpleRedirects/bin/Release/net5.0/SimpleRedirects.dll" orgPath="bin/SimpleRedirects.dll" />
-    <file path="source/SimpleRedirects.Core/bin/Release/net5.0/SimpleRedirects.Core.dll" orgPath="bin/SimpleRedirects.Core.dll" />
+    <folder path="./source/SimpleRedirects/App_Plugins/SimpleRedirects" orgPath="App_Plugins/SimpleRedirects" /> 
+    <file path="./source/SimpleRedirects/bin/Release/net5.0/SimpleRedirects.dll" orgPath="bin/SimpleRedirects.dll" />
+    <file path="./source/SimpleRedirects.Core/bin/Release/net5.0/SimpleRedirects.Core.dll" orgPath="bin/SimpleRedirects.Core.dll" />
   </files>
   <Actions />
   <control />
