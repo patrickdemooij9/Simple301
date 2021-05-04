@@ -5,9 +5,12 @@
         <Product>SimpleRedirects</Product>
         <PackageId>SimpleRedirects</PackageId>
         <Title>SimpleRedirects</Title>
-        <Description>...</Description>
-        <Product>...</Product>
+        <Authors>Patrick</Authors>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/patrickdemooij9/SimpleRedirects</PackageProjectUrl>
+        <Description>Umbraco Redirect Manager for the Umbraco Back-Office</Description>
         <PackageTags>umbraco plugin package</PackageTags>
+        <PackageIconUrl>https://raw.githubusercontent.com/patrickdemooij9/SimpleRedirects/v9/main/package/simpleRedirectsLogo.png</PackageIconUrl>
     </PropertyGroup>
 
     <ItemGroup>

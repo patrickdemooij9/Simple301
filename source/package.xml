@@ -4,7 +4,7 @@
     <package>
       <name>SimpleRedirects</name>
       <version>2.0.0</version>
-      <iconUrl>https://github.com/patrickdemooij9/SimpleRedirects/blob/v9/main/package/simpleRedirectsLogo.png</iconUrl>
+      <iconUrl>https://raw.githubusercontent.com/patrickdemooij9/SimpleRedirects/v9/main/package/simpleRedirectsLogo.png</iconUrl>
       <licence url="https://github.com/patrickdemooij9/SimpleRedirects/blob/v9/main/LICENSE">Apache License 2.0</licence>
       <url>https://our.umbraco.com/packages/backoffice-extensions/simpleredirects/</url>
       <requirements type="strict">
