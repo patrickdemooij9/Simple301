@@ -1,5 +1,5 @@
 # SimpleRedirects
-### Simple Redirect Manager for Umbraco 8###
+### Simple Redirect Manager for Umbraco 8 ###
 
 This project is a fork of the original Simple301 version: https://github.com/wkallhof/Simple301
 
@@ -16,17 +16,8 @@ Integrates directly with the Umbraco Content Pipeline, inserting itself in the f
 Nuget Package: ` Install-Package SimpleRedirects `
 
 ### Configuration ###
-By default, your `web.config` file will be updated with two application settings which are used to manage the cached state of the redirects that are created. They are as default :
-```xml
-<configuration>
-   ...
-  <appSettings>
-      ...
-      <add key="SimpleRedirects.CacheDurationInSeconds" value="3600"/>
-      <add key="SimpleRedirects.CacheEnabled" value="true"/>
-  </appSettings>
-</configuration>
-```
+You are able to change the configuration in your appsettings.json. By default the configuration is as follows:
+![image](https://user-images.githubusercontent.com/11466511/117047797-9114ad00-ad12-11eb-8bbf-07a1566f6be9.png)
 
 **SimpleRedirects.CacheDurationInSeconds** : This allows you to configure how long redirects are cached within the site. This only affects the user facing redirects so that the application doesn't read from the database for every request in the site. If you modify redirects within the back-office, the cache is automatically cleared per action (Add, Update, Delete). 
 
