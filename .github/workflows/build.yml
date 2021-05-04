@@ -18,23 +18,33 @@ jobs:
       id: get_version
       run: echo ::set-output name=VERSION::2.0.0
       shell: bash
+      
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
+    
+    - name: Setup NuGet.exe for use with actions
+      uses: NuGet/setup-nuget@v1.0.2        
+      
+    - name: Setup .net core
+      uses: actions/setup-dotnet@v1.4.0
+      
     - name: Setup UmbPack
       run: dotnet tool install Umbraco.Tools.Packages --global
+      
     - name: Restore dependencies
       run: dotnet restore ./source/SimpleRedirects.sln
+      
     - name: Build
       run: dotnet build ./source/SimpleRedirects.sln --configuration ${{ env.CONFIG }} --no-restore
+      
     - name: Create NuGet package file for Core
       run: dotnet pack ./source/SimpleRedirects.Core/SimpleRedirects.Core.csproj -c ${{ env.CONFIG }} --no-build --include-symbols -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
+    
     - name: Create NuGet package file for Backoffice
       run: dotnet pack ./source/SimpleRedirects/SimpleRedirects.csproj -c ${{ env.CONFIG }} --no-build --include-symbols -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
+   
     - name: Create Umbraco package file
       run: UmbPack pack ./source/package.xml -o ${{ env.OUTPUT }} -v ${{ steps.get_version.outputs.VERSION }}
+    
     - name: upload-artifacts
       uses: actions/upload-artifact@v2
       with:
