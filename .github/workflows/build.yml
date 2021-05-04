@@ -33,6 +33,8 @@ jobs:
       run: dotnet pack ./source/SimpleRedirects.Core/SimpleRedirects.Core.csproj -c ${{ env.CONFIG }} --no-build --include-symbols -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
     - name: Create NuGet package file for Backoffice
       run: dotnet pack ./source/SimpleRedirects/SimpleRedirects.csproj -c ${{ env.CONFIG }} --no-build --include-symbols -o ${{ env.OUTPUT }} /p:version=${{ steps.get_version.outputs.VERSION }}
+    - name: Create Umbraco package file
+      run: UmbPack pack ./package.xml -o ${{ env.OUTPUT }} -v ${{ steps.get_version.outputs.VERSION }}
     - name: upload-artifacts
       uses: actions/upload-artifact@v2
       with:
