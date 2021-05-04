@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <SimpleRedirectsContentFilesPath>$(MSBuildThisFileDirectory)..\App_Plugins\SimpleRedirects\**\*.*</SimpleRedirectsContentFilesPath>
+    </PropertyGroup>
+
+    <Target Name="CopySimpleRedirectsAssets" BeforeTargets="Build">
+        <ItemGroup>
+            <SimpleRedirectsContentFiles Include="$(SimpleRedirectsContentFilesPath)" />
+        </ItemGroup>
+        <Message Text="Copying SimpleRedirects files: $(SimpleRedirectsContentFilesPath) - #@(SimpleRedirectsContentFiles->Count()) files"  Importance="high" />
+        <Copy
+            SourceFiles="@(SimpleRedirectsContentFiles)"
+            DestinationFiles="@(SimpleRedirectsContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\SimpleRedirects\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true" />
+
+    </Target>
+
+    <Target Name="ClearSimpleRedirectsAssets" BeforeTargets="Clean">
+        <ItemGroup>
+            <SimpleRedirectsDir Include="$(MSBuildProjectDirectory)\App_Plugins\SimpleRedirects\" />
+        </ItemGroup>
+        <Message Text="Clear old SimpleRedirects data"  Importance="high" />
+        <RemoveDir Directories="@(SimpleRedirectsDir)"  />
+    </Target>
+
+</Project>
