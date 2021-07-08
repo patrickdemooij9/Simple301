@@ -809,11 +809,6 @@ Naciśnij przycisk <strong>instaluj</strong>, aby zainstalować bazę danych Umb
       i wskaż gdzie jest zapisany. Pakiety Umbraco przeważnie posiadają rozszerzenie ".umb" lub ".zip".
       ]]></key>
     <key alias="dropHere">Upuść, aby załadować</key>
-    <key alias="orClickHereToUpload">lub kliknij tutaj, aby wybrać pliki</key>
-    <key alias="uploadPackage">Załaduj pakiet</key>
-    <key alias="localPackageDescription">Zainstaluj lokalny pakiet poprzez wybranie go ze swojego komputera. Instaluj jedynie te pakiety, z zaufanych i znanych Tobie źródeł</key>
-    <key alias="uploadAnother">Załaduj kolejny pakiet</key>
-    <key alias="cancelAndUploadAnother">Anuluj i załaduj kolejny pakiet</key>
     <key alias="packageLicense">Licencja</key>
     <key alias="accept">Zgadzam się</key>
     <key alias="termsOfUse">zasady użytkowania</key>
@@ -861,14 +856,6 @@ Naciśnij przycisk <strong>instaluj</strong>, aby zainstalować bazę danych Umb
     <key alias="packageVersion">Wersja pakietu</key>
     <key alias="packageAlreadyInstalled">Pakiet jest już zainstalowany</key>
     <key alias="targetVersionMismatch">Ten pakiet nie może być zainstalowany, ponieważ wymaga Umbraco w wersji przynajmniej %0%</key>
-    <key alias="installStateUninstalling">Odinstalowywanie...</key>
-    <key alias="installStateDownloading">Pobieranie...</key>
-    <key alias="installStateImporting">Importowanie...</key>
-    <key alias="installStateInstalling">Instalowanie...</key>
-    <key alias="installStateRestarting">Restartowanie, proszę czekać...</key>
-    <key alias="installStateComplete">Wszystko skończone, Twoja przeglądarka się teraz odświeży, proszę czekać...</key>
-    <key alias="installStateCompleted">Proszę kliknąć Zakończ, aby zakończyć instalację i przeładować stronę.</key>
-    <key alias="installStateUploading">Wgrywanie pakietu...</key>
   </area>
   <area alias="paste">
     <key alias="doNothing">Wklej z zachowaniem formatowania (Nie zalecane)</key>
@@ -1095,9 +1082,9 @@ Naciśnij przycisk <strong>instaluj</strong>, aby zainstalować bazę danych Umb
       ]]></key>
     <key alias="sectionName">Nazwa Sekcji</key>
     <key alias="sectionMandatory">Sekcja jest wymagana</key>
-    <key alias="sectionMandatoryDesc">
+    <key alias="sectionMandatoryDesc"><![CDATA[
       Jeśli wymagana, szablon dziecka musi zawierać definicję <code>@section</code>, w przeciwnym przypadku wystąpi błąd.
-    </key>
+    ]]></key>
     <key alias="queryBuilder">Konstruktor zapytań</key>
     <key alias="itemsReturned">Element zwrócony, w</key>
     <key alias="iWant">Chcę</key>
@@ -1402,6 +1389,7 @@ Naciśnij przycisk <strong>instaluj</strong>, aby zainstalować bazę danych Umb
     <key alias="trySkipIisCustomErrorsCheckErrorMessage">Try Skip IIS Custom Errors wynosi obecnie '%0%'. Zalecane jest ustawienie go na '%1%' dla Twojego IIS w wersji (%2%).</key>
     <key alias="trySkipIisCustomErrorsCheckRectifySuccessMessage">Try Skip IIS Custom Errors ustawiono z powodzeniem na '%0%'.</key>
     <!-- Następujące klucze przekazują predefiniowane tokeny, nie wszystkie są identyczne jak powyżej -->
+    <key alias="configurationServiceFileNotFound">Plik nie istnieje: '%0%'.</key>
     <key alias="configurationServiceNodeNotFound"><![CDATA[Nie można znaleźć <strong>'%0%'</strong> w pliku konfiguracyjnym <strong>'%1%'</strong>.]]></key>
     <key alias="configurationServiceError">Wystąpił błąd, sprawdź logi, aby wyświetlić pełen opis błędu: %0%.</key>
     <key alias="httpsCheckValidCertificate">Certifikat Twojej strony jest poprawny.</key>

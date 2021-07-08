@@ -8,7 +8,7 @@ namespace SimpleRedirects.Core.Migrations
         {
         }
 
-        public override void Migrate()
+        protected override void Migrate()
         {
             if (!ColumnExists("Redirects", "IsRegex"))
             {

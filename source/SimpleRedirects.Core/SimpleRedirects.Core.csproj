@@ -13,7 +13,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/patrickdemooij9/SimpleRedirects/v9/main/package/simpleRedirectsLogo.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0-beta001"/>
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0-beta001"/>
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0-rc001" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0-rc001" />
   </ItemGroup>
 </Project>

@@ -4,14 +4,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Umbraco.Cms" Version="9.0.0-beta001" />
-        <PackageReference Include="Umbraco.Cms.SqlCe" Version="9.0.0-beta001" />
+        <PackageReference Include="Umbraco.Cms" Version="9.0.0-rc001" />
+        <PackageReference Include="Umbraco.Cms.SqlCe" Version="9.0.0-rc001" />
         <PackageReference Include="Umbraco.SqlServerCE" Version="4.0.0.1" />
     </ItemGroup>
 
-    <Import Project="..\SimpleRedirects\build\SimpleRedirects.targets"/>
+    <Import Project="..\SimpleRedirects\build\SimpleRedirects.targets" />
     <ItemGroup>
-        <ProjectReference Include="..\SimpleRedirects\SimpleRedirects.csproj"/>
+        <ProjectReference Include="..\SimpleRedirects\SimpleRedirects.csproj" />
     </ItemGroup>
 
     <ItemGroup>

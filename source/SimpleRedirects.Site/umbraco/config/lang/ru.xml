@@ -694,6 +694,7 @@
     <key alias="trySkipIisCustomErrorsCheckErrorMessage">Параметр 'Try Skip IIS Custom Errors' сейчас установлен в '%0%'. Рекомендуется установить в '%1%' для Вашего текущего IIS версии (%2%).</key>
     <key alias="trySkipIisCustomErrorsCheckRectifySuccessMessage">Параметр 'Try Skip IIS Custom Errors' успешно установлен в '%0%'.</key>
     <!-- The following keys get predefined tokens passed in that are not all the same, like above -->
+    <key alias="configurationServiceFileNotFound">Файл не существует: '%0%'.</key>
     <key alias="configurationServiceNodeNotFound"><![CDATA[Не найден параметр <strong>'%0%'</strong> в файле конфигурации <strong>'%1%'</strong>.]]></key>
     <key alias="configurationServiceError">Обнаружена ошибка, для получения полной информации обратитесь к журналу: %0%.</key>
     <key alias="healthCheckInvalidUrl">Ошибка проверки адреса URL %0% - '%1%'</key>
@@ -1134,11 +1135,6 @@
 		и указав на нужный файл. Пакеты Umbraco обычно являются архивами с расширением '.zip'.
 		]]></key>
     <key alias="dropHere">Перетащите сюда</key>
-    <key alias="orClickHereToUpload">или нажмите здесь для выбора файла пакета</key>
-    <key alias="uploadPackage">Загрузить пакет</key>
-    <key alias="localPackageDescription">Установите локальный пакет из файла, расположенного на Вашем компьютере. Остерегайтесь устанавливать пакеты из непроверенных источников!</key>
-    <key alias="uploadAnother">Загрузить еще один пакет</key>
-    <key alias="cancelAndUploadAnother">Отменить и загрузить другой пакет</key>
     <key alias="packageLicense">Лицензия</key>
     <key alias="accept">Я принимаю</key>
     <key alias="termsOfUse">условия использования</key>
@@ -1186,14 +1182,6 @@
     <key alias="packageVersion">Версия пакета</key>
     <key alias="packageAlreadyInstalled">Этот пакет уже установлен в системе</key>
     <key alias="targetVersionMismatch">Этот пакет не может быть установлен, он требует наличия Umbraco версии как минимум</key>
-    <key alias="installStateUninstalling">Удаление...</key>
-    <key alias="installStateDownloading">Загрузка...</key>
-    <key alias="installStateImporting">Импорт...</key>
-    <key alias="installStateInstalling">Установка...</key>
-    <key alias="installStateRestarting">Перезапуск, подождите, пожалуйста...</key>
-    <key alias="installStateComplete">Все готово, сейчас браузер перезагрузит страницу, подождите, пожалуйста...</key>
-    <key alias="installStateCompleted">Пожалуйста, нажмите кнопку 'Завершить' для завершения установки и перезагрузки страницы.</key>
-    <key alias="installStateUploading">Загрузка пакета...</key>
   </area>
   <area alias="paste">
     <key alias="doNothing">Вставить, полностью сохранив форматирование (не рекомендуется)</key>
@@ -1493,9 +1481,9 @@
       ]]></key>
     <key alias="sectionName">Название секции</key>
     <key alias="sectionMandatory">Секция обязательна</key>
-    <key alias="sectionMandatoryDesc">
+    <key alias="sectionMandatoryDesc"><![CDATA[
       Если секция помечена как обязательная, то дочерний шаблон должен обязательно содержать ее определение <code>@section</code>, в противном случае генерируется ошибка.
-    </key>
+    ]]></key>
     <key alias="queryBuilder">Генератор запросов</key>
     <key alias="itemsReturned">элементов в результате, за</key>
     <key alias="iWant">Мне нужны</key>

@@ -50,9 +50,6 @@ Umbraco.Cms.Core.PropertyEditors.ParameterEditors.MultiplePropertyGroupParameter
 Umbraco.Cms.Core.PropertyEditors.ParameterEditors.MultiplePropertyTypeParameterEditor, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ParameterEditors.PropertyGroupParameterEditor, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ParameterEditors.PropertyTypeParameterEditor, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.PackageActions.AllowDoctype, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.PackageActions.PublishRootDocument, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.Migrations.NoopMigration, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.HealthChecks.NotificationMethods.EmailNotificationMethod, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.HealthChecks.Checks.Services.SmtpCheck, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.HealthChecks.Checks.Security.ClickJackingCheck, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -167,7 +164,6 @@ Umbraco.Cms.Web.BackOffice.Controllers.MemberController, Umbraco.Web.BackOffice,
 Umbraco.Cms.Web.BackOffice.Controllers.MemberGroupController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.MemberTypeController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PackageController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Web.BackOffice.Controllers.PackageInstallController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PublicAccessController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PublishedSnapshotCacheStatusController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PublishedStatusController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -184,9 +180,7 @@ Umbraco.Cms.Web.BackOffice.Controllers.UpdateCheckController, Umbraco.Web.BackOf
 Umbraco.Cms.Web.BackOffice.Controllers.UserGroupsController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.UsersController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.Common.Controllers.RenderController, Umbraco.Web.Common, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.Examine.ExamineLuceneComposer, Umbraco.Examine.Lucene, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.Examine.ExamineLuceneFinalComposer, Umbraco.Examine.Lucene, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.PublishedCache.Compose.NotificationsComposer, Umbraco.PublishedCache.NuCache, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+Umbraco.Cms.Infrastructure.Migrations.NoopMigration, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_9_0_0.AddPasswordConfigToMemberTable, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_9_0_0.ExternalLoginTableIndexes, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_9_0_0.ExternalLoginTokenTable, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -202,6 +196,8 @@ Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_6_0.UpdateRelationTypeTable, U
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_1_0.ConvertTinyMceAndGridMediaUrlsToLocalLink, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_1_0.FixContentNuCascade, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_1_0.RenameUserLoginDtoDateIndex, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_15_0.AddCmsContentNuByteColumn, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_15_0.UpgradedIncludeIndexes, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_10_0.AddPropertyTypeLabelOnTopColumn, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_1.ChangeNuCacheJsonFormat, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_0.AddContentNuTable, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -242,7 +238,6 @@ Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_0.UpdateDefaultMandatoryLang
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_0.UpdatePickerIntegerValuesToUdi, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_0.UserForeignKeys, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_0.VariantsMigration, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_0.DataTypes.PreValueMigratorComposer, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.Common.CreateKeysAndIndexes, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.Upgrade.Common.DeleteKeysAndIndexes, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Infrastructure.Migrations.PostMigrations.ClearCsrfCookies, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -262,6 +257,7 @@ Umbraco.Cms.Core.PropertyEditors.ImageCropperPropertyEditor, Umbraco.Infrastruct
 Umbraco.Cms.Core.PropertyEditors.LabelPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ListViewPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MarkdownPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+Umbraco.Cms.Core.PropertyEditors.MediaPicker3PropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MediaPickerPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MultiNodeTreePickerPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MultipleTextStringPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -281,12 +277,11 @@ Umbraco.Cms.Core.PropertyEditors.ValueConverters.GridValueConverter, Umbraco.Inf
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.ImageCropperValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.JsonValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.MarkdownEditorValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+Umbraco.Cms.Core.PropertyEditors.ValueConverters.MediaPickerWithCropsValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.MultiUrlPickerValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.NestedContentManyValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.NestedContentSingleValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.RteMacroRenderingValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.Logging.Viewer.LogViewerComposer, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.Compose.NotificationsComposer, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 
 Umbraco.Cms.Core.PropertyEditors.IPropertyValueConverter
 
@@ -317,6 +312,7 @@ Umbraco.Cms.Core.PropertyEditors.ValueConverters.GridValueConverter, Umbraco.Inf
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.ImageCropperValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.JsonValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.MarkdownEditorValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+Umbraco.Cms.Core.PropertyEditors.ValueConverters.MediaPickerWithCropsValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.MultiUrlPickerValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.NestedContentManyValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ValueConverters.NestedContentSingleValueConverter, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -381,7 +377,6 @@ Umbraco.Cms.Web.BackOffice.Controllers.MemberController, Umbraco.Web.BackOffice,
 Umbraco.Cms.Web.BackOffice.Controllers.MemberGroupController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.MemberTypeController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PackageController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Web.BackOffice.Controllers.PackageInstallController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PublicAccessController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PublishedSnapshotCacheStatusController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Controllers.PublishedStatusController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -408,12 +403,6 @@ Umbraco.Cms.Web.Website.Controllers.UmbRegisterController, Umbraco.Web.Website, 
 Umbraco.Cms.Core.Composing.IComposer
 
 SimpleRedirects.Core.RedirectUserComposer, SimpleRedirects.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.Examine.ExamineLuceneComposer, Umbraco.Examine.Lucene, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.Examine.ExamineLuceneFinalComposer, Umbraco.Examine.Lucene, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.PublishedCache.Compose.NotificationsComposer, Umbraco.PublishedCache.NuCache, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Infrastructure.Migrations.Upgrade.V_8_0_0.DataTypes.PreValueMigratorComposer, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.Logging.Viewer.LogViewerComposer, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.Compose.NotificationsComposer, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 
 Umbraco.Cms.Core.Cache.ICacheRefresher
 
@@ -464,6 +453,7 @@ Umbraco.Cms.Core.PropertyEditors.ImageCropperPropertyEditor, Umbraco.Infrastruct
 Umbraco.Cms.Core.PropertyEditors.LabelPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.ListViewPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MarkdownPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+Umbraco.Cms.Core.PropertyEditors.MediaPicker3PropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MediaPickerPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MultiNodeTreePickerPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Core.PropertyEditors.MultipleTextStringPropertyEditor, Umbraco.Infrastructure, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -521,11 +511,6 @@ Umbraco.Cms.Core.HealthChecks.NotificationMethods.IHealthCheckNotificationMethod
 
 Umbraco.Cms.Core.HealthChecks.NotificationMethods.EmailNotificationMethod, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 
-Umbraco.Cms.Core.PackageActions.IPackageAction
-
-Umbraco.Cms.Core.PackageActions.AllowDoctype, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-Umbraco.Cms.Core.PackageActions.PublishRootDocument, Umbraco.Core, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
-
 Umbraco.Cms.Core.Trees.ISearchableTree
 
 Umbraco.Cms.Web.BackOffice.Trees.ContentTreeController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -536,4 +521,7 @@ Umbraco.Cms.Web.BackOffice.Trees.MediaTypeTreeController, Umbraco.Web.BackOffice
 Umbraco.Cms.Web.BackOffice.Trees.MemberTreeController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Trees.MemberTypeTreeController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
 Umbraco.Cms.Web.BackOffice.Trees.TemplatesTreeController, Umbraco.Web.BackOffice, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null
+
+Umbraco.Cms.Core.Packaging.PackageMigrationPlan
+
 
