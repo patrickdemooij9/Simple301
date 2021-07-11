@@ -17,7 +17,6 @@
 [Rr]eleases/
 x64/
 x86/
-build/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -196,3 +195,7 @@ FakesAssemblies/
 *.opt
 
 *.nuspec
+
+TEMP/
+Logs/
+{"mode":"full","isActive":false}
