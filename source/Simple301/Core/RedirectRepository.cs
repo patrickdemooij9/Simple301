@@ -44,7 +44,7 @@ namespace SimpleRedirects.Core
         public IEnumerable<Redirect> GetAllRedirects()
         {
             // Update with latest from DB
-            return FetchRedirects().Select(x => x.Value);
+            return FetchRedirects();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace SimpleRedirects.Core
                 if (redirect != null) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
 
                 // Second pull all for loop detection
-                var redirects = FetchRedirects();
+                var redirects = FetchRedirects().DistinctBy(it => it.OldUrl).ToDictionary(x => x.OldUrl); ;
                 if (!isRegex && DetectLoop(oldUrl, newUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
                 int idObj;
@@ -156,7 +156,7 @@ namespace SimpleRedirects.Core
                 if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
 
                 // Second pull all for loop detection
-                var redirects = FetchRedirects();
+                var redirects = FetchRedirects().DistinctBy(it => it.OldUrl).ToDictionary(x => x.OldUrl);
                 if (!redirect.IsRegex && DetectLoop(redirect.OldUrl, redirect.NewUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
                 //get DB Context, set update time, and persist
@@ -228,7 +228,7 @@ namespace SimpleRedirects.Core
         /// Fetches all redirects through cache layer
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        private Dictionary<string, Redirect> FetchRedirects(bool fromCache = false)
+        private IEnumerable<Redirect> FetchRedirects(bool fromCache = false)
         {
             // if from cache, make sure we add if it doesn't exist
             return fromCache
@@ -325,12 +325,12 @@ namespace SimpleRedirects.Core
         /// Fetches all redirects from the database
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        private Dictionary<string, Redirect> FetchRedirectsFromDb()
+        private IEnumerable<Redirect> FetchRedirectsFromDb()
         {
             using (var scope = _scopeProvider.CreateScope())
             {
                 var redirects = scope.Database.Query<Redirect>("SELECT * FROM Redirects");
-                return redirects != null ? redirects.DistinctBy(it => it.OldUrl).ToDictionary(x => x.OldUrl) : new Dictionary<string, Redirect>();
+                return redirects ?? Enumerable.Empty<Redirect>();
             }
         }
 
