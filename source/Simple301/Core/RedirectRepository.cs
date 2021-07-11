@@ -24,6 +24,8 @@ namespace SimpleRedirects.Core
     /// </summary>
     public class RedirectRepository
     {
+        private readonly object _updateLock = new object();
+
         private readonly ICacheManager _cacheManager;
         private const string CacheCategoryKey = "Redirects";
 
@@ -77,36 +79,43 @@ namespace SimpleRedirects.Core
             var redirect = FetchRedirectByOldUrl(oldUrl);
             if (redirect != null) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
 
-            // Second pull all for loop detection
-            var redirects = FetchRedirects();
-            if (!isRegex && DetectLoop(oldUrl, newUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
-
-            int idObj;
-
-            //Add redirect to DB
-            using (var scope = _scopeProvider.CreateScope())
+            lock (_updateLock)
             {
-                idObj = Convert.ToInt32(scope.Database.Insert(new Redirect
+                //Do another check after lock in case the same one was added while locking
+                redirect = FetchRedirectByOldUrl(oldUrl);
+                if (redirect != null) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
+
+                // Second pull all for loop detection
+                var redirects = FetchRedirects();
+                if (!isRegex && DetectLoop(oldUrl, newUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
+
+                int idObj;
+
+                //Add redirect to DB
+                using (var scope = _scopeProvider.CreateScope())
                 {
-                    IsRegex = isRegex,
-                    OldUrl = oldUrl,
-                    NewUrl = newUrl,
-                    RedirectCode = redirectCode,
-                    LastUpdated = DateTime.Now.ToUniversalTime(),
-                    Notes = notes
-                }));
+                    idObj = Convert.ToInt32(scope.Database.Insert(new Redirect
+                    {
+                        IsRegex = isRegex,
+                        OldUrl = oldUrl,
+                        NewUrl = newUrl,
+                        RedirectCode = redirectCode,
+                        LastUpdated = DateTime.Now.ToUniversalTime(),
+                        Notes = notes
+                    }));
 
-                scope.Complete();
+                    scope.Complete();
+                }
+
+                //Clear the current cache
+                ClearCache();
+
+                //Fetch the added redirect
+                var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
+
+                //return new redirect
+                return newRedirect;
             }
-
-            //Clear the current cache
-            ClearCache();
-
-            //Fetch the added redirect
-            var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
-
-            //return new redirect
-            return newRedirect;
         }
 
         /// <summary>
@@ -140,22 +149,29 @@ namespace SimpleRedirects.Core
             var existingRedirect = FetchRedirectByOldUrl(redirect.OldUrl);
             if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
 
-            // Second pull all for loop detection
-            var redirects = FetchRedirects();
-            if (!redirect.IsRegex && DetectLoop(redirect.OldUrl, redirect.NewUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
-
-            //get DB Context, set update time, and persist
-            using (var scope = _scopeProvider.CreateScope())
+            lock (_updateLock)
             {
-                redirect.LastUpdated = DateTime.Now.ToUniversalTime();
-                scope.Database.Update(redirect);
-                scope.Complete();
+                //Do another check after lock in case the same one was added while locking
+                existingRedirect = FetchRedirectByOldUrl(redirect.OldUrl);
+                if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
 
-                //Clear the current cache
-                ClearCache();
+                // Second pull all for loop detection
+                var redirects = FetchRedirects();
+                if (!redirect.IsRegex && DetectLoop(redirect.OldUrl, redirect.NewUrl, redirects)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
-                //return updated redirect
-                return redirect;
+                //get DB Context, set update time, and persist
+                using (var scope = _scopeProvider.CreateScope())
+                {
+                    redirect.LastUpdated = DateTime.Now.ToUniversalTime();
+                    scope.Database.Update(redirect);
+                    scope.Complete();
+
+                    //Clear the current cache
+                    ClearCache();
+
+                    //return updated redirect
+                    return redirect;
+                }
             }
         }
 
@@ -314,7 +330,7 @@ namespace SimpleRedirects.Core
             using (var scope = _scopeProvider.CreateScope())
             {
                 var redirects = scope.Database.Query<Redirect>("SELECT * FROM Redirects");
-                return redirects != null ? redirects.ToDictionary(x => x.OldUrl) : new Dictionary<string, Redirect>();
+                return redirects != null ? redirects.DistinctBy(it => it.OldUrl).ToDictionary(x => x.OldUrl) : new Dictionary<string, Redirect>();
             }
         }
 
