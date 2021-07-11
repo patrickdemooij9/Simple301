@@ -261,7 +261,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="App_Plugins\SimpleRedirects\assets\lang\en.xml" />
+    <Content Include="App_Plugins\SimpleRedirects\lang\en-US.xml" />
     <Content Include="App_Plugins\SimpleRedirects\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
