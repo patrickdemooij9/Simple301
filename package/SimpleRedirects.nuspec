@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SimpleRedirects</id>
-    <version>1.0.9</version>
+    <version>1.0.11</version>
     <title>SimpleRedirects</title>
     <authors>Patrick</authors>
     <owners>Patrick</owners>
@@ -11,7 +11,7 @@
 	<icon>images\simpleRedirectsLogo.png</icon>
 	<license type="expression">Apache-2.0</license>
     <description>Umbraco Redirect Manager for the Umbraco Back-Office</description>
-    <releaseNotes>Added SimpleRedirects logo</releaseNotes>
+    <releaseNotes>Bugfixes related to duplicate source urls</releaseNotes>
   </metadata>
   <files>
 	<file src="..\..\package\simpleRedirectsLogo.png" target="images\"/>
