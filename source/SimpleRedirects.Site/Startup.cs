@@ -61,8 +61,8 @@ namespace SimpleRedirects.Site
             app.UseUmbraco()
                 .WithMiddleware(u =>
                 {
-                    u.WithBackOffice();
-                    u.WithWebsite();
+                    u.UseBackOffice();
+                    u.UseWebsite();
                 })
                 .WithEndpoints(u =>
                 {
