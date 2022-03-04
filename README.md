@@ -1,5 +1,5 @@
 # SimpleRedirects
-### Simple Redirect Manager for Umbraco 8 ###
+### Simple Redirect Manager for Umbraco 8/9 ###
 
 This project is a fork of the original Simple301 version: https://github.com/wkallhof/Simple301
 
@@ -17,11 +17,19 @@ Nuget Package: ` Install-Package SimpleRedirects `
 
 ### Configuration ###
 You are able to change the configuration in your appsettings.json. By default the configuration is as follows:
-![image](https://user-images.githubusercontent.com/11466511/117047797-9114ad00-ad12-11eb-8bbf-07a1566f6be9.png)
+``` 
+"SimpleRedirects": {
+    "CacheEnabled": true,
+    "CacheDuration": 86400, 
+    "OnlyRedirectOn404": false
+  } 
+```
 
 **SimpleRedirects.CacheDurationInSeconds** : This allows you to configure how long redirects are cached within the site. This only affects the user facing redirects so that the application doesn't read from the database for every request in the site. If you modify redirects within the back-office, the cache is automatically cleared per action (Add, Update, Delete). 
 
 **SimpleRedirects.CacheEnabled** : This allows you to toggle whether or not caching is enabled. Since this package is hit for every requested URL in the site, it is important to consider the performance implications of disabling cache. Use this to troubleshoot redirect issues.
+
+**SimpleRedirects.OnlyRedirectOn404**: When enabling this, the redirects will only take place if there is no page/image on that URL. You can enable this for performance reasons.
 
 These caching settings were added in order to support load balanced environments, where in previous versions the applications held on to redirects only in memory (persisting to the DB only if modified), which doesn't work in a load balanced environement (they may exist in a memory collection on one server, but not on the other). 
 
