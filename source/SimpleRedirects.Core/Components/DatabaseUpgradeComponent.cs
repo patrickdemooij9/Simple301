@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using SimpleRedirects.Core.Migrations;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Migrations;
 using Umbraco.Cms.Core.Scoping;
@@ -13,17 +14,21 @@ namespace SimpleRedirects.Core.Components
     {
         private readonly IScopeProvider _scopeProvider;
         private readonly IKeyValueService _keyValueService;
+        private readonly IRuntimeState _runtimeState;
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
 
-        public DatabaseUpgradeComponent(IMigrationPlanExecutor migrationPlanExecutor, IScopeProvider scopeProvider, IKeyValueService keyValueService)
+        public DatabaseUpgradeComponent(IMigrationPlanExecutor migrationPlanExecutor, IScopeProvider scopeProvider, IKeyValueService keyValueService, IRuntimeState runtimeState)
         {
             _migrationPlanExecutor = migrationPlanExecutor;
             _scopeProvider = scopeProvider;
             _keyValueService = keyValueService;
+            _runtimeState = runtimeState;
         }
 
         public void Initialize()
         {
+            if (_runtimeState.Level != RuntimeLevel.Run) return;
+
             var plan = new MigrationPlan("SimpleRedirectsMigration");
             plan.From(string.Empty)
                 .To<InitialMigration>("state-1")
