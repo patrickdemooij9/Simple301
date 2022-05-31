@@ -21,8 +21,8 @@ namespace SimpleRedirects.Core
             builder.Dashboards().Add<RedirectDashboard>();
             builder.Components().Append<DatabaseUpgradeComponent>();
 
-            builder.Services.AddUnique<RedirectRepository>();
-            builder.Services.AddUnique<ICacheManager, CacheManager>();
+            builder.Services.AddSingleton<RedirectRepository>();
+            builder.Services.AddSingleton<ICacheManager, CacheManager>();
 
             builder.Services.Configure<SimpleRedirectsOptions>(builder.Config.GetSection(
                 SimpleRedirectsOptions.Position));
