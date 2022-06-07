@@ -25,9 +25,6 @@ jobs:
     - name: Setup .net core
       uses: actions/setup-dotnet@v1.4.0
       
-    - name: Setup UmbPack
-      run: dotnet tool install Umbraco.Tools.Packages --global
-      
     - name: Restore dependencies
       run: dotnet restore ./source/SimpleRedirects.sln
       
@@ -43,12 +40,6 @@ jobs:
 #    - name: Push packages to NuGet
 #      run: dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_DEPLOY_KEY }} -s https://api.nuget.org/v3/index.json
  
-    - name: Create Umbraco package file
-      run: UmbPack pack ./source/package.xml -o ${{ env.OUTPUT }} -v ${{ steps.get_version.outputs.VERSION }}
-      
-#   - name: Push package to Our
-#     run: umbpack push ${{ env.OUTPUT }}/UmbracoPackage.1_${{ steps.get_version.outputs.VERSION }}.zip -k ${{ secrets.UMBRACO_DEPLOY_KEY }}      
-    
     - name: upload-artifacts
       uses: actions/upload-artifact@v2
       with:
