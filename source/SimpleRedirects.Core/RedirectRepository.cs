@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using SimpleRedirects.Core.Extensions;
 using SimpleRedirects.Core.Models;
 using SimpleRedirects.Core.Utilities.Caching;
+using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Extensions;
 
@@ -15,14 +16,16 @@ namespace SimpleRedirects.Core
     public class RedirectRepository
     {
         private readonly ICacheManager _cacheManager;
-        private const string CacheCategoryKey = "Redirects";
+        private readonly DistributedCache _distributedCache;
+        public const string CacheCategoryKey = "Redirects";
 
         private readonly IScopeProvider _scopeProvider;
 
-        public RedirectRepository(IScopeProvider scopeProvider, ICacheManager cacheManager)
+        public RedirectRepository(IScopeProvider scopeProvider, ICacheManager cacheManager, DistributedCache distributedCache)
         {
             _scopeProvider = scopeProvider;
             _cacheManager = cacheManager;
+            _distributedCache = distributedCache;
         }
 
         /// <summary>
@@ -195,7 +198,7 @@ namespace SimpleRedirects.Core
         /// </summary>
         public void ClearCache()
         {
-            _cacheManager.ClearByKeyPrefix(CacheCategoryKey);
+            _distributedCache.RefreshAll(RedirectCacheRefresher.UniqueId);
         }
 
         /// <summary>
