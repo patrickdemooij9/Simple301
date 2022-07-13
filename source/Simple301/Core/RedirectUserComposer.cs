@@ -7,6 +7,7 @@ using Umbraco.Web.Routing;
 
 namespace SimpleRedirects.Core
 {
+    [RuntimeLevel(MinLevel =RuntimeLevel.Run)]
     public class RedirectUserComposer : IUserComposer
     {
         public void Compose(Composition composition)
