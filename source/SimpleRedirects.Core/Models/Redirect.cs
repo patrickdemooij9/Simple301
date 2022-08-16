@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NPoco;
@@ -41,10 +43,26 @@ namespace SimpleRedirects.Core.Models
         [JsonProperty("notes")]
         public string Notes { get; set; }
 
-        public string GetNewUrl(Uri uri)
+        public string GetNewUrl(Uri uri, bool preserveQueryString)
         {
             if (!IsRegex || !NewUrl.Contains($"$"))
-                return NewUrl;
+            {
+                var url = NewUrl;
+                if (!preserveQueryString ||
+                    !Uri.TryCreate(NewUrl, UriKind.RelativeOrAbsolute, out var _)) return url;
+
+                var index = url.IndexOf('?');
+                var queryString = index >= 0 ? url.Substring(index) : "";
+                var query = HttpUtility.ParseQueryString(queryString);
+                var appendQuery = HttpUtility.ParseQueryString(uri.Query);
+                foreach (var item in appendQuery.AllKeys)
+                {
+                    query[item] = appendQuery.Get(item);
+                }
+
+                url = $"{url.Split('?').First()}{(query.Count > 0 ? $"?{query}" : string.Empty)}";
+                return url;
+            }
 
             try
             {
