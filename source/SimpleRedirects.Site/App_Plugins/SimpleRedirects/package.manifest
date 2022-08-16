@@ -4,7 +4,7 @@
 		'~/App_Plugins/SimpleRedirects/assets/scripts/vendors.min.js'
 	],
 	css: [
-		'~/App_Plugins/SimpleRedirects/assets/styles/styles.min.css',
+		'~/App_Plugins/SimpleRedirects/assets/styles/styles.css',
 		'~/App_Plugins/SimpleRedirects/assets/styles/vendors.min.css'
 	]
 }
