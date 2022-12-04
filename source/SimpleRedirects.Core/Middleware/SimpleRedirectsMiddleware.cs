@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +77,10 @@ namespace SimpleRedirects.Core.Middleware
 
         private bool HandleRedirect(HttpContext context)
         {
-            var url = new Uri(context.Request.GetEncodedUrl());
+            var fullUrl = context.Request.GetEncodedUrl();
+            if (_config.IgnoreQueryString)
+                fullUrl = fullUrl.Split('?').First();
+            var url = new Uri(fullUrl);
             var matchedRedirect = _redirectRepository.FindRedirect(url);
             if (matchedRedirect == null)
             {
@@ -84,7 +88,7 @@ namespace SimpleRedirects.Core.Middleware
             };
 
             var isPerm = matchedRedirect.RedirectCode == (int)HttpStatusCode.MovedPermanently;
-            context.Response.Redirect(matchedRedirect.GetNewUrl(url), isPerm);
+            context.Response.Redirect(matchedRedirect.GetNewUrl(new Uri(context.Request.GetEncodedUrl()), _config.PreserveQueryString), isPerm);
             return true;
         }
     }
