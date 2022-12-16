@@ -3,6 +3,10 @@
     display: block;
 }
 
+#SimpleRedirects .export {
+    padding-right: 10px;
+}
+
 #SimpleRedirects a {
     background-color: transparent;
 }

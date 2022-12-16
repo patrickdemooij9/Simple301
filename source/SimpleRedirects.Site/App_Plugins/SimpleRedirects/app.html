@@ -9,13 +9,18 @@
                     <h1>
                         Simple Redirects Manager
                     </h1>
-
+                    
                     <!-- Clear Cache -->
                     <div class="pull-right">
                         <span ng-show="cacheCleared">Cache Cleared!</span>
                         <button class="btn btn-info btn-sm" ng-click="clearCache()">Clear Cache</button>
                     </div>
-
+                    
+                    <!-- Export Redirects -->
+                    <div class="pull-right export">
+                        <button class="btn btn-info btn-sm" ng-click="exportRedirects()">Export Redirects</button>
+                    </div>
+                    
                     <p class="lead">
                         Add, Update, and Delete redirects in the table below.
                     </p>

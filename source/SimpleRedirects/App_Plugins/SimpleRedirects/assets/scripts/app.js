@@ -34,17 +34,24 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
     }
 
     /*
+    * Handles exporting all simple redirects to a csv file
+    */
+    $scope.exportRedirects = function () {
+        location.href = "backoffice/SimpleRedirects/RedirectApi/ExportRedirects";
+    }
+    
+    /*
     * Handles fetching all redirects from the server.
     */
     $scope.fetchRedirects = function () {
-        return SimpleRedirectsApi.getAll().then($scope.onRecieveAllRedirectsResponse.bind(this));
+        return SimpleRedirectsApi.getAll().then($scope.onReceiveAllRedirectsResponse.bind(this));
     };
 
     /*
     * Response handler for requesting all redirects
     */
-    $scope.onRecieveAllRedirectsResponse = function (response) {
-        //Somethign went wrong. Error out
+    $scope.onReceiveAllRedirectsResponse = function (response) {
+        //Something went wrong. Error out
         if (!response || !response.data) {
             $scope.errorMessage = "Error fetching redirects from server";
             return;
@@ -261,7 +268,6 @@ angular.module("umbraco.resources").factory("SimpleRedirectsApi", function ($htt
         remove: function (id) {
             return $http.delete("backoffice/SimpleRedirects/RedirectApi/Delete?id=" + id);
         },
-
         //Clear cache
         clearCache: function () {
             return $http.post("backoffice/SimpleRedirects/RedirectApi/ClearCache");

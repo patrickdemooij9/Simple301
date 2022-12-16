@@ -47,7 +47,6 @@ namespace SimpleRedirects.Core
             {
                 return new AddRedirectResponse() { Success = false, Message = "There was an error adding the redirect : "+ e.Message };
             }
-            
         }
 
         /// <summary>
@@ -58,7 +57,6 @@ namespace SimpleRedirects.Core
         [HttpPost]
         public UpdateRedirectResponse Update(UpdateRedirectRequest request)
         {
-
             if (request == null) return new UpdateRedirectResponse() { Success = false, Message = "Request was empty" };
             if (!ModelState.IsValid) return new UpdateRedirectResponse() { Success = false, Message = "Missing required attributes" };
 
@@ -101,6 +99,19 @@ namespace SimpleRedirects.Core
         public void ClearCache()
         {
             _redirectRepository.ClearCache();
+        }
+
+        /// <summary>
+        /// GET to export simple redirects to CSV
+        /// </summary>
+        [HttpGet]
+        public ActionResult ExportRedirects()
+        {
+            var redirects = GetAll();
+            var fileName = $"SimpleRedirectsExport_{DateTime.Today.ToShortDateString()}.csv";
+
+            var redirectsBytes = _redirectRepository.WriteToCsv(redirects);
+            return File(redirectsBytes, "text/csv", fileName);
         }
     }
 }

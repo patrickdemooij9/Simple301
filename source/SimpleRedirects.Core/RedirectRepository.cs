@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text.RegularExpressions;
+using CsvHelper;
 using SimpleRedirects.Core.Extensions;
 using SimpleRedirects.Core.Models;
 using SimpleRedirects.Core.Utilities.Caching;
@@ -209,6 +212,21 @@ namespace SimpleRedirects.Core
         }
 
         /// <summary>
+        /// Creates a byte array of redirects for CSV export
+        /// </summary>
+        public byte[] WriteToCsv(IEnumerable<Redirect> redirects)
+        {
+            using var memory = new MemoryStream();
+            using (var writer = new StreamWriter(memory))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(redirects);
+            }
+            return memory.ToArray();
+        }
+
+
+        /// <summary>
         /// Fetches all redirects through cache layer
         /// </summary>
         /// <returns>Collection of redirects</returns>
@@ -302,6 +320,7 @@ namespace SimpleRedirects.Core
 
                 scope.Complete();
             }
+
             return results;
         }
 
@@ -362,6 +381,7 @@ namespace SimpleRedirects.Core
                     return true;
                 }
             }
+
             return false;
         }
     }
