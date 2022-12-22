@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Text.RegularExpressions;
 using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using SimpleRedirects.Core.Extensions;
 using SimpleRedirects.Core.Models;
 using SimpleRedirects.Core.Utilities.Caching;
@@ -225,6 +226,25 @@ namespace SimpleRedirects.Core
             return memory.ToArray();
         }
 
+        /// <summary>
+        /// Creates an IEnumerable of Redirects from a CSV
+        /// </summary>
+        private static IEnumerable<Redirect> GetRedirectsFromCsv(IFormFile file)
+        {
+            using var reader = new StreamReader(file.OpenReadStream());
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            var redirects = csv.GetRecords<Redirect>().ToList();
+            return redirects;
+        }
+
+        public void ImportRedirects(IFormFile file)
+        {
+            var importedRedirects = GetRedirectsFromCsv(file);
+            foreach (var redirect in importedRedirects)
+            {
+                AddRedirect(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.RedirectCode, redirect.Notes);
+            }
+        }
 
         /// <summary>
         /// Fetches all redirects through cache layer

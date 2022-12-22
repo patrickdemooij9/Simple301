@@ -113,5 +113,15 @@ namespace SimpleRedirects.Core
             var redirectsBytes = _redirectRepository.WriteToCsv(redirects);
             return File(redirectsBytes, "text/csv", fileName);
         }
+
+        /// <summary>
+        /// Import redirects from CSV
+        /// </summary>
+        [HttpPost]
+        public void ImportRedirects(bool overrideExistingImports, bool clearImports)
+        {
+            var file = HttpContext.Request.Form.Files[0];
+            _redirectRepository.ImportRedirects(file);
+        }
     }
 }

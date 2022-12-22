@@ -17,8 +17,13 @@
                     </div>
                     
                     <!-- Export Redirects -->
-                    <div class="pull-right export">
+                    <div class="pull-right padding-right">
                         <button class="btn btn-info btn-sm" ng-click="exportRedirects()">Export Redirects</button>
+                    </div>
+                    
+                    <!-- Import Redirects -->
+                    <div class="pull-right padding-right">
+                        <button class="btn btn-info btn-sm" ng-click="openImportOverlay()">Import Redirects</button>
                     </div>
                     
                     <p class="lead">
@@ -97,6 +102,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Pagination Template for ngTable redirect table -->
 <script type="text/ng-template" id="pager">
