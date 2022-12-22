@@ -183,6 +183,15 @@ namespace SimpleRedirects.Core
             ClearCache();
         }
 
+        public void DeleteAllRedirects()
+        {
+            var allRedirects = GetAllRedirects();
+            foreach (var redirect in allRedirects)
+            {
+                DeleteRedirect(redirect.Id);
+            }
+        }
+
         /// <summary>
         /// Handles finding a redirect based on the oldUrl
         /// </summary>
@@ -237,11 +246,34 @@ namespace SimpleRedirects.Core
             return redirects;
         }
 
-        public void ImportRedirects(IFormFile file)
+        public void ImportRedirects(IFormFile file, bool updateExisting, bool clearImports)
         {
-            var importedRedirects = GetRedirectsFromCsv(file);
+            var importedRedirects = GetRedirectsFromCsv(file).ToArray();
+            if (clearImports)
+            {
+                DeleteAllRedirects();
+                foreach (var redirect in importedRedirects)
+                {
+                    AddRedirect(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.RedirectCode, redirect.Notes);
+                }
+                return;
+            }
+
             foreach (var redirect in importedRedirects)
             {
+                var old = FetchRedirectByOldUrl(redirect.OldUrl);
+                if (old is not null)
+                {
+                    if (updateExisting)
+                    {
+                        DeleteRedirect(old.Id);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 AddRedirect(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.RedirectCode, redirect.Notes);
             }
         }

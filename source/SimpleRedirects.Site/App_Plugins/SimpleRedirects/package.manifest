@@ -5,7 +5,6 @@
 	],
 	css: [
 		'~/App_Plugins/SimpleRedirects/assets/styles/styles.css',
-		'~/App_Plugins/SimpleRedirects/assets/styles/import.css',
 		'~/App_Plugins/SimpleRedirects/assets/styles/vendors.min.css'
 	]
 }

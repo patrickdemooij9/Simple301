@@ -93,6 +93,24 @@ namespace SimpleRedirects.Core
         }
 
         /// <summary>
+        /// DELETE to delete all redirects
+        /// </summary>
+        /// <returns>Response object detailing success or failure</returns>
+        [HttpDelete]
+        public DeleteRedirectResponse DeleteAll()
+        {
+            try
+            {
+                _redirectRepository.DeleteAllRedirects();
+                return new DeleteRedirectResponse() { Success = true };
+            }
+            catch(Exception e)
+            {
+                return new DeleteRedirectResponse() { Success = false, Message = "There was an error deleting the redirects : " + e.Message };
+            }
+        }
+
+        /// <summary>
         /// POST to clear cache
         /// </summary>
         [HttpPost]
@@ -118,10 +136,10 @@ namespace SimpleRedirects.Core
         /// Import redirects from CSV
         /// </summary>
         [HttpPost]
-        public void ImportRedirects(bool overrideExistingImports, bool clearImports)
+        public void ImportRedirects(bool updateExisting, bool clearImports)
         {
             var file = HttpContext.Request.Form.Files[0];
-            _redirectRepository.ImportRedirects(file);
+            _redirectRepository.ImportRedirects(file, updateExisting, clearImports);
         }
     }
 }
