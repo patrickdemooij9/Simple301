@@ -188,27 +188,14 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
             $scope.errorMessage = response.data.errorMessage;
         }
     }
-
-    $scope.openDeleteConfirmationOverlay = function () {
-        const overlay = {
-            title: 'Confirm Delete',
-            content: 'Are you sure you want to delete all redirects?',
-            disableBackdropClick: true,
-            disableEscKey: true,
-            confirmType: 'delete',
-            submit: function () {
-                $scope.deleteAllRedirects()
-                overlayService.close();
-            }
-        };
-        overlayService.confirm(overlay);
-    }
     
     /*
     * Handles the delete request to delete all redirects.
     */
     $scope.deleteAllRedirects = function () {
-        return SimpleRedirectsApi.deleteAllRedirects().then($scope.fetchRedirects.bind(this));
+        if (confirm("Are you sure you want to delete all redirects?")) {
+            SimpleRedirectsApi.deleteAllRedirects().then($scope.fetchRedirects.bind(this));
+        }
     }
     
     /*
