@@ -43,35 +43,37 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
     $scope.openImportOverlay = function () {
         const overlay = {
             title: 'Import Redirects',
-            size: 'medium',
-            view: '/App_Plugins/SimpleRedirects/import.html',
-            submit: function () {
-                if ($scope.tryImportRedirects()) {
-                    overlayService.close();
-                }
+            value: {
+                redirects: $scope.redirects.length
             },
+            view: '/App_Plugins/SimpleRedirects/import.html',
+            close: function () {
+                $scope.closeImportOverlay();
+            }
+        };
+        overlayService.open(overlay);
+    }
+
+    $scope.closeImportOverlay = function () {
+        overlayService.close();
+        $scope.initialLoad = false;
+        $scope.initLoad();
+    }
+
+    $scope.openExportOverlay = function () {
+        const overlay = {
+            title: 'Export Redirects',
+            
+            value: {
+                redirects: $scope.redirects.length
+            },
+            view: '/App_Plugins/SimpleRedirects/export.html',
             close: function () {
                 overlayService.close();
             }
         };
         overlayService.open(overlay);
     }
-
-    /*
-    * Handles importing redirects if a file has been uploaded
-    */
-    $scope.tryImportRedirects = function () {
-        let file = document.getElementById('redirectImportFile');
-        let override = document.getElementById('updateExistingCheckbox').checked;
-        let reimport = document.getElementById('clearImportsCheckbox').checked;
-        //Check if a file has been selected
-        if (file.validity.valueMissing) {
-            file.setCustomValidity("No File Selected For Import");
-            file.reportValidity();
-            return;
-        }
-        return SimpleRedirectsApi.importRedirects(file.files[0], override, reimport).then($scope.fetchRedirects.bind(this));
-    };
 
     /*
     * Handles fetching all redirects from the server.
@@ -188,7 +190,7 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
             $scope.errorMessage = response.data.errorMessage;
         }
     }
-    
+
     /*
     * Handles the delete request to delete all redirects.
     */
@@ -197,7 +199,7 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
             SimpleRedirectsApi.deleteAllRedirects().then($scope.fetchRedirects.bind(this));
         }
     }
-    
+
     /*
     * Clears the global error message
     */
@@ -330,13 +332,6 @@ angular.module("umbraco.resources").factory("SimpleRedirectsApi", function ($htt
         //Clear cache
         clearCache: function () {
             return $http.post("backoffice/SimpleRedirects/RedirectApi/ClearCache");
-        },
-        //Import Redirects
-        importRedirects: function (file, updateExisting, clearImports) {
-            return Upload.upload({
-                url: "backoffice/SimpleRedirects/RedirectApi/ImportRedirects?updateExisting=" + updateExisting + "&clearImports=" + clearImports,
-                file: file
-            });
         }
     };
 });

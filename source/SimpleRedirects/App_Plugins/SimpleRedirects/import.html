@@ -1,18 +1,62 @@
-<!-- Upload file to import -->
-<div>
-    <input id="redirectImportFile" type="file" accept="text/csv" required/>
-</div>
-
-<!-- Checkbox - update existing redirects -->
-<div>
-    <label>
-        <input id="updateExistingCheckbox" type="checkbox">Update any existing redirects
-    </label>
-</div>
-
-<!-- Checkbox - empty list and add all imports -->
-<div>
-    <label>
-        <input id="clearImportsCheckbox" type="checkbox">Delete all existing redirects before import
-    </label>
+<div class="redirects-export-import" ng-controller="SimpleRedirects.ImportExportController as vm" noDirtyCheck>
+    <input type="file" ngf-select="handleFile($file)"
+           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv"
+           class="form-control"/>
+    <div class="file-actions" ng-if="vm.file !== null">
+        <span class="file-action">Overwrite existing redirects?</span>
+        <umb-toggle
+                class="file-action"
+                checked="vm.overwriteMatches"
+                on-click="vm.toggleOverwriteMatches()"
+                show-labels="true"
+                label-on="Overwrite"
+                label-off="Don't overwrite"
+                label-position="right"
+                hide-icons="true">
+        </umb-toggle>
+        <umb-button
+                class="file-action button-right"
+                action="vm.import()"
+                type="button"
+                button-style="action"
+                icon="icon-right-double-arrow"
+                label="Import redirects"
+                disabled="vm.buttonStates === 'busy'">
+        </umb-button>
+    </div>
+    <div class="import-response" ng-if="vm.importResponse !== null">
+        <span class="import-response-message">{{ vm.importResponse.message }}</span>
+    </div>
+    <div class="import-response-error-list" ng-if="vm.importErrorListPageResult.length > 0">
+        <div class="umb-table">
+            <div class="umb-table-head">
+                <div class="umb-table-row">
+                    <div class="umb-table-cell">#</div>
+                    <div class="umb-table-cell">Error message</div>
+                    <div class="umb-table-cell">Old Url</div>
+                    <div class="umb-table-cell">New Url</div>
+                    <div class="umb-table-cell">Redirect Code</div>
+                </div>
+            </div>
+            <div class="umb-table-body">
+                <div class="umb-table-row" ng-repeat="error in vm.importErrorListPageResult">
+                    <div class="umb-table-cell">{{ error.entry }}</div>
+                    <div class="umb-table-cell">{{ error.message }}</div>
+                    <div class="umb-table-cell">{{ error.oldUrl }}</div>
+                    <div class="umb-table-cell">{{ error.newUrl }}</div>
+                    <div class="umb-table-cell">{{ error.redirectCode }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-center items-center">
+            <umb-pagination
+                    ng-if="vm.pagination.totalPages > 1"
+                    page-number="vm.pagination.pageNumber"
+                    total-pages="vm.pagination.totalPages"
+                    on-next="vm.nextPage"
+                    on-prev="vm.prevPage"
+                    on-go-to-page="vm.goToPage">
+            </umb-pagination>
+        </div>
+    </div>
 </div>

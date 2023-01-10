@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using SimpleRedirects.Core.Enums;
+using SimpleRedirects.Core.Extensions;
 using SimpleRedirects.Core.Models;
+using SimpleRedirects.Core.Services;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 
@@ -11,10 +15,12 @@ namespace SimpleRedirects.Core
     public class RedirectApiController : UmbracoAuthorizedApiController
     {
         private readonly RedirectRepository _redirectRepository;
+        private readonly ImportExportFactory _importExportFactory;
 
-        public RedirectApiController(RedirectRepository redirectRepository)
+        public RedirectApiController(RedirectRepository redirectRepository, ImportExportFactory importExportFactory)
         {
             _redirectRepository = redirectRepository;
+            _importExportFactory = importExportFactory;
         }
 
         /// <summary>
@@ -36,16 +42,19 @@ namespace SimpleRedirects.Core
         public AddRedirectResponse Add(AddRedirectRequest request)
         {
             if (request == null) return new AddRedirectResponse() { Success = false, Message = "Request was empty" };
-            if (!ModelState.IsValid) return new AddRedirectResponse() { Success = false, Message = "Missing required attributes" };
+            if (!ModelState.IsValid)
+                return new AddRedirectResponse() { Success = false, Message = "Missing required attributes" };
 
             try
             {
-                var redirect = _redirectRepository.AddRedirect(request.IsRegex, request.OldUrl, request.NewUrl, request.RedirectCode, request.Notes);
+                var redirect = _redirectRepository.AddRedirect(request.IsRegex, request.OldUrl, request.NewUrl,
+                    request.RedirectCode, request.Notes);
                 return new AddRedirectResponse() { Success = true, NewRedirect = redirect };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return new AddRedirectResponse() { Success = false, Message = "There was an error adding the redirect : "+ e.Message };
+                return new AddRedirectResponse()
+                    { Success = false, Message = "There was an error adding the redirect : " + e.Message };
             }
         }
 
@@ -58,7 +67,8 @@ namespace SimpleRedirects.Core
         public UpdateRedirectResponse Update(UpdateRedirectRequest request)
         {
             if (request == null) return new UpdateRedirectResponse() { Success = false, Message = "Request was empty" };
-            if (!ModelState.IsValid) return new UpdateRedirectResponse() { Success = false, Message = "Missing required attributes" };
+            if (!ModelState.IsValid)
+                return new UpdateRedirectResponse() { Success = false, Message = "Missing required attributes" };
 
             try
             {
@@ -67,7 +77,8 @@ namespace SimpleRedirects.Core
             }
             catch (Exception e)
             {
-                return new UpdateRedirectResponse() { Success = false, Message = "There was an error updating the redirect : "+e.Message };
+                return new UpdateRedirectResponse()
+                    { Success = false, Message = "There was an error updating the redirect : " + e.Message };
             }
         }
 
@@ -79,16 +90,19 @@ namespace SimpleRedirects.Core
         [HttpDelete]
         public DeleteRedirectResponse Delete(int id)
         {
-            if (id == 0) return new DeleteRedirectResponse() { Success = false, Message = "Invalid ID passed for redirect to delete" };
+            if (id == 0)
+                return new DeleteRedirectResponse()
+                    { Success = false, Message = "Invalid ID passed for redirect to delete" };
 
             try
             {
                 _redirectRepository.DeleteRedirect(id);
                 return new DeleteRedirectResponse() { Success = true };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return new DeleteRedirectResponse() { Success = false, Message = "There was an error deleting the redirect : " + e.Message };
+                return new DeleteRedirectResponse()
+                    { Success = false, Message = "There was an error deleting the redirect : " + e.Message };
             }
         }
 
@@ -104,9 +118,10 @@ namespace SimpleRedirects.Core
                 _redirectRepository.DeleteAllRedirects();
                 return new DeleteRedirectResponse() { Success = true };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return new DeleteRedirectResponse() { Success = false, Message = "There was an error deleting the redirects : " + e.Message };
+                return new DeleteRedirectResponse()
+                    { Success = false, Message = "There was an error deleting the redirects : " + e.Message };
             }
         }
 
@@ -123,23 +138,29 @@ namespace SimpleRedirects.Core
         /// GET to export simple redirects to CSV
         /// </summary>
         [HttpGet]
-        public ActionResult ExportRedirects()
+        public ActionResult ExportRedirects(DataRecordProvider dataRecordProvider)
         {
-            var redirects = GetAll();
-            var fileName = $"SimpleRedirectsExport_{DateTime.Today.ToShortDateString()}.csv";
+            var dataRecordCollectionFile = _importExportFactory.GetDataRecordProvider(dataRecordProvider)
+                .ExportDataRecordCollection();
 
-            var redirectsBytes = _redirectRepository.WriteToCsv(redirects);
-            return File(redirectsBytes, "text/csv", fileName);
+            return dataRecordCollectionFile.AsFileContentResult();
         }
 
         /// <summary>
         /// Import redirects from CSV
         /// </summary>
         [HttpPost]
-        public void ImportRedirects(bool updateExisting, bool clearImports)
+        public ImportRedirectsResponse ImportRedirects(bool overwriteMatches)
         {
-            var file = HttpContext.Request.Form.Files[0];
-            _redirectRepository.ImportRedirects(file, updateExisting, clearImports);
+            var file = HttpContext.Request.Form.Files.Any() ? HttpContext.Request.Form.Files[0] : null;
+            if (file is null) return ImportRedirectsResponse.EmptyImportRecordResponse();
+            if (!file.CanGetDataRecordProviderFromFile(out var provider))
+                return ImportRedirectsResponse.EmptyImportRecordResponse(
+                    "No redirects imported, provided file is not supported by the import process. Please provide a .csv or .xlsx file.");
+
+            var response = _importExportFactory.GetDataRecordProvider(provider)
+                .ImportRedirectsFromCollection(file, overwriteMatches);
+            return response;
         }
     }
 }

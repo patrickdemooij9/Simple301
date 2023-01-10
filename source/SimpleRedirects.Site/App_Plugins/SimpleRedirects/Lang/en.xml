@@ -3,4 +3,8 @@
     <area alias="dashboardTabs">
         <key alias="redirectDashboard">Redirects</key>
     </area>
+    <area alias="actions">
+        <key alias="exportToCsv">Export to CSV</key>
+        <key alias="exportToExcel">Export to Excel (.xlsx)</key>
+    </area>
 </language>

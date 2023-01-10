@@ -222,63 +222,6 @@ namespace SimpleRedirects.Core
         }
 
         /// <summary>
-        /// Creates a byte array of redirects for CSV export
-        /// </summary>
-        public byte[] WriteToCsv(IEnumerable<Redirect> redirects)
-        {
-            using var memory = new MemoryStream();
-            using (var writer = new StreamWriter(memory))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecords(redirects);
-            }
-            return memory.ToArray();
-        }
-
-        /// <summary>
-        /// Creates an IEnumerable of Redirects from a CSV
-        /// </summary>
-        private static IEnumerable<Redirect> GetRedirectsFromCsv(IFormFile file)
-        {
-            using var reader = new StreamReader(file.OpenReadStream());
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            var redirects = csv.GetRecords<Redirect>().ToList();
-            return redirects;
-        }
-
-        public void ImportRedirects(IFormFile file, bool updateExisting, bool clearImports)
-        {
-            var importedRedirects = GetRedirectsFromCsv(file).ToArray();
-            if (clearImports)
-            {
-                DeleteAllRedirects();
-                foreach (var redirect in importedRedirects)
-                {
-                    AddRedirect(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.RedirectCode, redirect.Notes);
-                }
-                return;
-            }
-
-            foreach (var redirect in importedRedirects)
-            {
-                var old = FetchRedirectByOldUrl(redirect.OldUrl);
-                if (old is not null)
-                {
-                    if (updateExisting)
-                    {
-                        DeleteRedirect(old.Id);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-
-                AddRedirect(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.RedirectCode, redirect.Notes);
-            }
-        }
-
-        /// <summary>
         /// Fetches all redirects through cache layer
         /// </summary>
         /// <returns>Collection of redirects</returns>
@@ -307,7 +250,7 @@ namespace SimpleRedirects.Core
         /// </summary>
         /// <param name="oldUrl">OldUrl of redirect to find</param>
         /// <returns>Single redirect with matching OldUrl</returns>
-        private Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
+        public Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
         {
             oldUrl = CleanUrl(oldUrl);
             return fromCache

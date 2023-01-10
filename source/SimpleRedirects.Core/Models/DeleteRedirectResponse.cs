@@ -3,12 +3,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace SimpleRedirects.Core.Models
 {
-    public class DeleteRedirectResponse
+    public class DeleteRedirectResponse : BaseResponse
     {
-        [JsonProperty("success")]
-        public bool Success { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; }
     }
 }
