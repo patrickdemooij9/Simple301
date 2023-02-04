@@ -9,13 +9,28 @@
                     <h1>
                         Simple Redirects Manager
                     </h1>
-
-                    <!-- Clear Cache -->
+                    
+                    <!-- Delete All Redirects -->
                     <div class="pull-right">
+                        <button class="btn btn-danger btn-sm" ng-click="deleteAllRedirects()">Delete All</button>
+                    </div>
+                    
+                    <!-- Clear Cache -->
+                    <div class="pull-right padding-right">
                         <span ng-show="cacheCleared">Cache Cleared!</span>
                         <button class="btn btn-info btn-sm" ng-click="clearCache()">Clear Cache</button>
                     </div>
-
+                    
+                    <!-- Export Redirects -->
+                    <div class="pull-right padding-right">
+                        <button class="btn btn-info btn-sm" ng-click="openExportOverlay()">Export Redirects</button>
+                    </div>
+                    
+                    <!-- Import Redirects -->
+                    <div class="pull-right padding-right">
+                        <button class="btn btn-info btn-sm" ng-click="openImportOverlay()">Import Redirects</button>
+                    </div>
+                    
                     <p class="lead">
                         Add, Update, and Delete redirects in the table below.
                     </p>
@@ -92,6 +107,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Pagination Template for ngTable redirect table -->
 <script type="text/ng-template" id="pager">

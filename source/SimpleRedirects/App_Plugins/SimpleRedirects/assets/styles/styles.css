@@ -3,6 +3,36 @@
     display: block;
 }
 
+.umb-overlay-container {
+    overflow-y: visible;
+}
+
+.file-actions {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.button-right {
+    margin-left: auto;
+}
+
+.import-response {
+    margin-top: 8px;
+}
+
+.import-response-error-list {
+    margin-top: 8px;
+}
+
+.file-action:not(:last-child) {
+    margin-right: 8px;
+}
+
+#SimpleRedirects .padding-right {
+    padding-right: 10px;
+}
+
 #SimpleRedirects a {
     background-color: transparent;
 }

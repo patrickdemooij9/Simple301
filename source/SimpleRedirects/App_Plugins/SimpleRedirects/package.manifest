@@ -1,6 +1,7 @@
 {
 	javascript: [
 		'~/App_Plugins/SimpleRedirects/assets/scripts/app.js',
+		'~/App_Plugins/SimpleRedirects/assets/scripts/import-export.controller.js',
 		'~/App_Plugins/SimpleRedirects/assets/scripts/vendors.min.js'
 	],
 	css: [
