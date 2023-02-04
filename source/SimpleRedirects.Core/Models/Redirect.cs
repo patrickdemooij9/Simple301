@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using CsvHelper.Configuration.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NPoco;
@@ -21,6 +22,7 @@ namespace SimpleRedirects.Core.Models
 
         [Column("IsRegex")]
         [JsonProperty("isRegex")]
+        [Default("False")]
         public bool IsRegex { get; set; }
 
         [Column("OldUrl")]
@@ -29,18 +31,22 @@ namespace SimpleRedirects.Core.Models
 
         [Column("NewUrl")]
         [JsonProperty("newUrl")]
+        [Default("")]
         public string NewUrl { get; set; }
 
         [Column("RedirectCode")]
         [JsonProperty("redirectCode")]
+        [Default(301)]
         public int RedirectCode { get; set; }
 
         [Column("LastUpdated")]
         [JsonProperty("lastUpdated")]
-        public DateTime LastUpdated { get; set; }
+        [Default("")]
+        public DateTime? LastUpdated { get; set; }
 
         [Column("Notes")]
         [JsonProperty("notes")]
+        [Default("")]
         public string Notes { get; set; }
 
         public string GetNewUrl(Uri uri, bool preserveQueryString)

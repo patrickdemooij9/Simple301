@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text.RegularExpressions;
+using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using SimpleRedirects.Core.Extensions;
 using SimpleRedirects.Core.Models;
 using SimpleRedirects.Core.Utilities.Caching;
@@ -179,6 +183,15 @@ namespace SimpleRedirects.Core
             ClearCache();
         }
 
+        public void DeleteAllRedirects()
+        {
+            var allRedirects = GetAllRedirects();
+            foreach (var redirect in allRedirects)
+            {
+                DeleteRedirect(redirect.Id);
+            }
+        }
+
         /// <summary>
         /// Handles finding a redirect based on the oldUrl
         /// </summary>
@@ -237,7 +250,7 @@ namespace SimpleRedirects.Core
         /// </summary>
         /// <param name="oldUrl">OldUrl of redirect to find</param>
         /// <returns>Single redirect with matching OldUrl</returns>
-        private Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
+        public Redirect FetchRedirectByOldUrl(string oldUrl, bool fromCache = false)
         {
             oldUrl = CleanUrl(oldUrl);
             return fromCache
@@ -302,6 +315,7 @@ namespace SimpleRedirects.Core
 
                 scope.Complete();
             }
+
             return results;
         }
 
@@ -362,6 +376,7 @@ namespace SimpleRedirects.Core
                     return true;
                 }
             }
+
             return false;
         }
     }

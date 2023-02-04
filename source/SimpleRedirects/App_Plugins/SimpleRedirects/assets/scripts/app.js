@@ -5,7 +5,7 @@ app.requires.push('ngTable');
 * -----------------------------------------------------
 * Main Simple 301 controller used to render out the Simple 301 content section
 */
-angular.module("umbraco").controller("SimpleRedirectsController", function ($scope, $filter, SimpleRedirectsApi, ngTableParams) {
+angular.module("umbraco").controller("SimpleRedirectsController", function ($scope, $filter, SimpleRedirectsApi, ngTableParams, editorService, overlayService) {
 
     //Property to display error messages
     $scope.errorMessage = '';
@@ -34,17 +34,59 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
     }
 
     /*
+    * Handles exporting all simple redirects to a csv file
+    */
+    $scope.exportRedirects = function () {
+        location.href = 'backoffice/SimpleRedirects/RedirectApi/ExportRedirects';
+    }
+
+    $scope.openImportOverlay = function () {
+        const overlay = {
+            title: 'Import Redirects',
+            value: {
+                redirects: $scope.redirects.length
+            },
+            view: '/App_Plugins/SimpleRedirects/import.html',
+            close: function () {
+                $scope.closeImportOverlay();
+            }
+        };
+        overlayService.open(overlay);
+    }
+
+    $scope.closeImportOverlay = function () {
+        overlayService.close();
+        $scope.initialLoad = false;
+        $scope.initLoad();
+    }
+
+    $scope.openExportOverlay = function () {
+        const overlay = {
+            title: 'Export Redirects',
+            
+            value: {
+                redirects: $scope.redirects.length
+            },
+            view: '/App_Plugins/SimpleRedirects/export.html',
+            close: function () {
+                overlayService.close();
+            }
+        };
+        overlayService.open(overlay);
+    }
+
+    /*
     * Handles fetching all redirects from the server.
     */
     $scope.fetchRedirects = function () {
-        return SimpleRedirectsApi.getAll().then($scope.onRecieveAllRedirectsResponse.bind(this));
+        return SimpleRedirectsApi.getAll().then($scope.onReceiveAllRedirectsResponse.bind(this));
     };
 
     /*
     * Response handler for requesting all redirects
     */
-    $scope.onRecieveAllRedirectsResponse = function (response) {
-        //Somethign went wrong. Error out
+    $scope.onReceiveAllRedirectsResponse = function (response) {
+        //Something went wrong. Error out
         if (!response || !response.data) {
             $scope.errorMessage = "Error fetching redirects from server";
             return;
@@ -80,8 +122,7 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
             $scope.errorMessage = '';
             $scope.redirects.push(response.data.newRedirect);
             $scope.refreshTable();
-        }
-        else {
+        } else {
             $scope.errorMessage = response.data.message;
         }
     }
@@ -109,8 +150,7 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
             $scope.errorMessage = '';
             redirect.lastUpdated = response.data.updatedRedirect.lastUpdated;
             redirect.$edit = false;
-        }
-        else {
+        } else {
             $scope.errorMessage = response.data.message;
         }
     }
@@ -146,9 +186,17 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
                 $scope.tableParams.reload();
             }
 
-        }
-        else {
+        } else {
             $scope.errorMessage = response.data.errorMessage;
+        }
+    }
+
+    /*
+    * Handles the delete request to delete all redirects.
+    */
+    $scope.deleteAllRedirects = function () {
+        if (confirm("Are you sure you want to delete all redirects?")) {
+            SimpleRedirectsApi.deleteAllRedirects().then($scope.fetchRedirects.bind(this));
         }
     }
 
@@ -191,15 +239,24 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
 
             //Are we ordering the results?
             var orderedData = params.sorting() ?
-                    $filter('orderBy')(searchedData, params.orderBy()) :
-                    searchedData;
+                $filter('orderBy')(searchedData, params.orderBy()) :
+                searchedData;
 
             //Set totals and page counts
             params.total(orderedData.length);
             var pagedResults = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
             //Cheat and add a blank redirect so the user can add a new redirect right from the table
-            pagedResults.push({ id: "-1", isRegex: false, oldUrl: "", newUrl: "", redirectCode: 301, notes: "", lastUpdated: "", $edit: true });
+            pagedResults.push({
+                id: "-1",
+                isRegex: false,
+                oldUrl: "",
+                newUrl: "",
+                redirectCode: 301,
+                notes: "",
+                lastUpdated: "",
+                $edit: true
+            });
             $defer.resolve(pagedResults);
         }
     })
@@ -211,7 +268,9 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
         if (!$scope.initialLoad) {
             //Get the available log dates to view log entries for.
             $scope.fetchRedirects()
-                .then(function () { $scope.initialLoad = true; });
+                .then(function () {
+                    $scope.initialLoad = true;
+                });
         }
     }
 
@@ -229,8 +288,7 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
             // if it is selected already or there is only one tab, init load
             if ($parent.hasClass('active') || $parent.children().length == 1)
                 $scope.initLoad();
-        }
-        else {
+        } else {
             $scope.initLoad();
         }
     });
@@ -243,7 +301,7 @@ angular.module("umbraco").controller("SimpleRedirectsController", function ($sco
 * Resource to handle making requests to the backoffice API to handle CRUD operations
 * for redirect management
 */
-angular.module("umbraco.resources").factory("SimpleRedirectsApi", function ($http) {
+angular.module("umbraco.resources").factory("SimpleRedirectsApi", function ($http, Upload) {
     return {
         //Get all redirects from the server
         getAll: function () {
@@ -251,17 +309,26 @@ angular.module("umbraco.resources").factory("SimpleRedirectsApi", function ($htt
         },
         //Send data to add a new redirect
         add: function (isRegex, oldUrl, newUrl, redirectCode, notes) {
-            return $http.post("backoffice/SimpleRedirects/RedirectApi/Add", JSON.stringify({ isRegex: isRegex, oldUrl: oldUrl, newUrl: newUrl, redirectCode: redirectCode, notes: notes }));
+            return $http.post("backoffice/SimpleRedirects/RedirectApi/Add", JSON.stringify({
+                isRegex: isRegex,
+                oldUrl: oldUrl,
+                newUrl: newUrl,
+                redirectCode: redirectCode,
+                notes: notes
+            }));
         },
         //Send request to update an existing redirect
         update: function (redirect) {
-            return $http.post("backoffice/SimpleRedirects/RedirectApi/Update", JSON.stringify({ redirect: redirect }));
+            return $http.post("backoffice/SimpleRedirects/RedirectApi/Update", JSON.stringify({redirect: redirect}));
         },
         //Remove / Delete an existing redirect
         remove: function (id) {
             return $http.delete("backoffice/SimpleRedirects/RedirectApi/Delete?id=" + id);
         },
-
+        //Delete All Redirects
+        deleteAllRedirects: function () {
+            return $http.delete("backoffice/SimpleRedirects/RedirectApi/DeleteAll");
+        },
         //Clear cache
         clearCache: function () {
             return $http.post("backoffice/SimpleRedirects/RedirectApi/ClearCache");

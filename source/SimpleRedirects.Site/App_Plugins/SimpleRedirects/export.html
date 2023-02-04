@@ -1,0 +1,15 @@
+<div class="redirects-export-import" ng-controller="SimpleRedirects.ImportExportController as vm" noDirtyCheck>
+    <span>{{ vm.redirectTotal }} records available for export.</span>
+    <umb-button-group
+            class="button-right"
+            ng-if="vm.buttonGroup"
+            default-button="vm.buttonGroup.defaultButton"
+            sub-buttons="vm.buttonGroup.subButtons"
+            button-style="primary"
+            icon="icon-download-alt"
+            direction="down"
+            disabled="vm.redirectTotal === 0"
+            state="vm.buttonStates"
+            float="right">
+    </umb-button-group>
+</div>
