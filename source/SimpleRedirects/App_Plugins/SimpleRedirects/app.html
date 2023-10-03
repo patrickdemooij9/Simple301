@@ -12,23 +12,23 @@
                     
                     <!-- Delete All Redirects -->
                     <div class="pull-right">
-                        <button class="btn btn-danger btn-sm" ng-click="deleteAllRedirects()">Delete All</button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="deleteAllRedirects()">Delete All</button>
                     </div>
                     
                     <!-- Clear Cache -->
                     <div class="pull-right padding-right">
                         <span ng-show="cacheCleared">Cache Cleared!</span>
-                        <button class="btn btn-info btn-sm" ng-click="clearCache()">Clear Cache</button>
+                        <button type="button" class="btn btn-info btn-sm" ng-click="clearCache()">Clear Cache</button>
                     </div>
                     
                     <!-- Export Redirects -->
                     <div class="pull-right padding-right">
-                        <button class="btn btn-info btn-sm" ng-click="openExportOverlay()">Export Redirects</button>
+                        <button type="button" class="btn btn-info btn-sm" ng-click="openExportOverlay()">Export Redirects</button>
                     </div>
                     
                     <!-- Import Redirects -->
                     <div class="pull-right padding-right">
-                        <button class="btn btn-info btn-sm" ng-click="openImportOverlay()">Import Redirects</button>
+                        <button type="button" class="btn btn-info btn-sm" ng-click="openImportOverlay()">Import Redirects</button>
                     </div>
                     
                     <p class="lead">
@@ -93,10 +93,10 @@
                                         {{ item.lastUpdated | date:'M/d/yy h:mm a' }}
                                     </td>
                                     <td data-title="'Actions'">
-                                        <button ng-if="!item.$edit" ng-click="item.$edit = true" class="btn btn-info">Edit</button>
-                                        <button ng-if="item.$edit  && item.id != -1" ng-click="updateRedirect(item)" class="btn btn-success">Save</button>
-                                        <button ng-if="item.id != -1" class="btn btn-danger" ng-click="deleteRedirect(item)">Delete</button>
-                                        <button ng-if="item.$edit  && item.id == -1" ng-click="addRedirect(item)" class="btn btn-primary">Add</button>
+                                        <button type="button" ng-if="!item.$edit" ng-click="item.$edit = true" class="btn btn-info">Edit</button>
+                                        <button type="button" ng-if="item.$edit  && item.id != -1" ng-click="updateRedirect(item)" class="btn btn-success">Save</button>
+                                        <button type="button" ng-if="item.id != -1" class="btn btn-danger" ng-click="deleteRedirect(item)">Delete</button>
+                                        <button type="button" ng-if="item.$edit  && item.id == -1" ng-click="addRedirect(item)" class="btn btn-primary">Add</button>
                                     </td>
                                 </tr>
                             </tbody>
